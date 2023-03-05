@@ -18,7 +18,8 @@ const userSchema = new mongoose.Schema({
 
   coverPicture: { type: String },
 
-  
+  followAction:   { type: mongoose.Schema.Types.ObjectId, ref: "FollowUnfollow" },
+
   role: { type: mongoose.Schema.Types.ObjectId, ref: "Role" },
 
 });

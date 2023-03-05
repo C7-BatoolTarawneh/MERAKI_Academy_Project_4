@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const rolesShema = new mongoose.Schema({
+const FollowUnfollowShema = new mongoose.Schema({
     followers :[ { type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     following: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
 
@@ -9,5 +9,5 @@ const rolesShema = new mongoose.Schema({
 
 
 //export Schema
-module.exports = mongoose.model('FollowUnfollow', rolesShema);
+module.exports = mongoose.model('FollowUnfollow', FollowUnfollow);
 //controller

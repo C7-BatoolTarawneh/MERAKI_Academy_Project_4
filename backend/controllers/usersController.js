@@ -24,6 +24,8 @@ const register = async (req, res) => {
       email,
       password,
       role: role,
+      followersCount: 0,
+      followingsCount: 0,
     });
 
     await user.save();
@@ -162,7 +164,7 @@ const updateUserEmail = async (req, res) => {
 
   const userId = req.token.userId;
   const newEmail = req.body.email.toLowerCase();
-console.log("123");
+  console.log("123");
   try {
     // Find the user by ID and update their email with the new value
     const user = await userModel.findByIdAndUpdate(
@@ -222,164 +224,160 @@ const updateUserPassword = async (req, res) => {
   }
 };
 const updateUserProfilePicture = async (req, res) => {
-    const userId = req.token.userId;
-    const newProfilePicture = req.body.profilePicture;
-  
-    try {
-      const user = await userModel.findByIdAndUpdate(
-        userId,
-        { profilePicture: newProfilePicture },
-        { new: true }
-      );
-      if (!user) {
-        return res.status(404).json({
-          success: false,
-          message: `User not found`,
-        });
-      }
-      res.status(200).json({
-        success: true,
-        message: `User profile picture updated successfully`,
-        user: user,
-      });
-    } catch (err) {
-      res.status(500).json({
+  const userId = req.token.userId;
+  const newProfilePicture = req.body.profilePicture;
+
+  try {
+    const user = await userModel.findByIdAndUpdate(
+      userId,
+      { profilePicture: newProfilePicture },
+      { new: true }
+    );
+    if (!user) {
+      return res.status(404).json({
         success: false,
-        message: `Server Error`,
-        err: err.message,
+        message: `User not found`,
       });
     }
-  };
-  
-  const updateUserCoverPicture = async (req, res) => {
-    const userId = req.token.userId;
-    const newCoverPicture = req.body.coverPicture;
-  
-    try {
-      const user = await userModel.findByIdAndUpdate(
-        userId,
-        { coverPicture: newCoverPicture },
-        { new: true }
-      );
-      if (!user) {
-        return res.status(404).json({
-          success: false,
-          message: `User not found`,
-        });
-      }
-      res.status(200).json({
-        success: true,
-        message: `User cover picture updated successfully`,
-        user: user,
-      });
-    } catch (err) {
-      res.status(500).json({
+    res.status(200).json({
+      success: true,
+      message: `User profile picture updated successfully`,
+      user: user,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: `Server Error`,
+      err: err.message,
+    });
+  }
+};
+
+const updateUserCoverPicture = async (req, res) => {
+  const userId = req.token.userId;
+  const newCoverPicture = req.body.coverPicture;
+
+  try {
+    const user = await userModel.findByIdAndUpdate(
+      userId,
+      { coverPicture: newCoverPicture },
+      { new: true }
+    );
+    if (!user) {
+      return res.status(404).json({
         success: false,
-        message: `Server Error`,
-        err: err.message,
+        message: `User not found`,
       });
     }
-  };
-  
-  const deleteUser = async (req, res) => {
-    // Get the ID of the user to delete from the JWT token
-    const userId = req.token.userId;
-  
-    try {
-      // Find the user to delete by their ID and remove them from the database
-      const deletedUser = await userModel.findByIdAndRemove(userId);
-      if (!deletedUser) {
-        return res.status(404).json({
-          success: false,
-          message: `User not found`,
-        });
-      }
-      res.status(200).json({
-        success: true,
-        message: `User account and all of its information have been deleted`,
-      });
-    } catch (err) {
-      res.status(500).json({
+    res.status(200).json({
+      success: true,
+      message: `User cover picture updated successfully`,
+      user: user,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: `Server Error`,
+      err: err.message,
+    });
+  }
+};
+
+const deleteUser = async (req, res) => {
+  // Get the ID of the user to delete from the JWT token
+  const userId = req.token.userId;
+
+  try {
+    // Find the user to delete by their ID and remove them from the database
+    const deletedUser = await userModel.findByIdAndRemove(userId);
+    if (!deletedUser) {
+      return res.status(404).json({
         success: false,
-        message: `Server Error`,
-        err: err.message,
+        message: `User not found`,
       });
     }
-  };
-  
-  
-  
-  // This function adds a user to the followers list of another user
-  const followUser = async (req, res) => {
-    // Get the ID of the user who is being followed from the request parameters
-    const followedUserId = req.params.id;
-    // Get the ID of the user who is following from the JWT token
-    const followerUserId = req.token.userId;
-  
-    try {
-      // Find the user who is being followed by their ID
-      const followedUser = await userModel.findById(followedUserId);
-      if (!followedUser) {
-        return res.status(404).json({
-          success: false,
-          message: `User not found`,
-        });
-      }
-      // Add the follower's ID to the followers list of the followed user
-      followedUser.followers.push(followerUserId);
-      // Save the updated user object
-      await followedUser.save();
-      res.status(200).json({
-        success: true,
-        message: `User ${followerUserId} is now following user ${followedUserId}`,
-        user: followedUser,
-      });
-    } catch (err) {
-      res.status(500).json({
-        success: false,
-        message: `Server Error`,
-        err: err.message,
-      });
-    }
-  };
-  
-  // This function removes a user from the followers list of another user
-  const unfollowUser = async (req, res) => {
-    // Get the ID of the user who is being unfollowed from the request parameters
-    const unfollowedUserId = req.params.id;
-    // Get the ID of the user who is unfollowing from the JWT token
-    const unfollowerUserId = req.token.userId;
-  
-    try {
-      // Find the user who is being unfollowed by their ID
-      const unfollowedUser = await userModel.findById(unfollowedUserId);
-      if (!unfollowedUser) {
-        return res.status(404).json({
-          success: false,
-          message: `User not found`,
-        });
-      }
-      // Remove the unfollower's ID from the followers list of the unfollowed user
-      unfollowedUser.followers = unfollowedUser.followers.filter(
-        (id) => id != unfollowerUserId
-      );
-      // Save the updated user object
-      await unfollowedUser.save();
-      res.status(200).json({
-        success: true,
-        message: `User ${unfollowerUserId} has unfollowed user ${unfollowedUserId}`,
-        user: unfollowedUser,
-      });
-    } catch (err) {
-      res.status(500).json({
-        success: false,
-        message: `Server Error`,
-        err: err.message,
-      });
-    }
-  };
-  
-  
+    res.status(200).json({
+      success: true,
+      message: `User account and all of its information have been deleted`,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: `Server Error`,
+      err: err.message,
+    });
+  }
+};
+
+// // This function adds a user to the followers list of another user
+// const followUser = async (req, res) => {
+//   // Get the ID of the user who is being followed from the request parameters
+//   const followedUserId = req.params.id;
+//   // Get the ID of the user who is following from the JWT token
+//   const followerUserId = req.token.userId;
+
+//   try {
+//     // Find the user who is being followed by their ID
+//     const followedUser = await userModel.findById(followedUserId);
+//     if (!followedUser) {
+//       return res.status(404).json({
+//         success: false,
+//         message: `User not found`,
+//       });
+//     }
+//     // Add the follower's ID to the followers list of the followed user
+//     followedUser.followers.push(followerUserId);
+//     // Save the updated user object
+//     await followedUser.save();
+//     res.status(200).json({
+//       success: true,
+//       message: `User ${followerUserId} is now following user ${followedUserId}`,
+//       user: followedUser,
+//     });
+//   } catch (err) {
+//     res.status(500).json({
+//       success: false,
+//       message: `Server Error`,
+//       err: err.message,
+//     });
+//   }
+// };
+
+// // This function removes a user from the followers list of another user
+// const unfollowUser = async (req, res) => {
+//   // Get the ID of the user who is being unfollowed from the request parameters
+//   const unfollowedUserId = req.params.id;
+//   // Get the ID of the user who is unfollowing from the JWT token
+//   const unfollowerUserId = req.token.userId;
+
+//   try {
+//     // Find the user who is being unfollowed by their ID
+//     const unfollowedUser = await userModel.findById(unfollowedUserId);
+//     if (!unfollowedUser) {
+//       return res.status(404).json({
+//         success: false,
+//         message: `User not found`,
+//       });
+//     }
+//     // Remove the unfollower's ID from the followers list of the unfollowed user
+//     unfollowedUser.followers = unfollowedUser.followers.filter(
+//       (id) => id != unfollowerUserId
+//     );
+//     // Save the updated user object
+//     await unfollowedUser.save();
+//     res.status(200).json({
+//       success: true,
+//       message: `User ${unfollowerUserId} has unfollowed user ${unfollowedUserId}`,
+//       user: unfollowedUser,
+//     });
+//   } catch (err) {
+//     res.status(500).json({
+//       success: false,
+//       message: `Server Error`,
+//       err: err.message,
+//     });
+//   }
+// };
 
 module.exports = {
   register,
@@ -391,6 +389,6 @@ module.exports = {
   updateUserProfilePicture,
   updateUserCoverPicture,
   deleteUser,
-  followUser,
-  unfollowUser
+  // followUser,
+  // unfollowUser,
 };

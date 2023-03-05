@@ -11,7 +11,6 @@ const rolesRouter = require("./routes/rolesRoute")
 app.use("/roles",rolesRouter);
 const usersRouter = require("./routes/usersRoute")
 app.use("/users",usersRouter);
-
 // Handles any other endpoints [unassigned - endpoints]
 app.use("*", (req, res) => res.status(404).json("NO content at this path"));
 

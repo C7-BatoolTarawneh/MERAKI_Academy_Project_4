@@ -2,26 +2,32 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 
 const userSchema = new mongoose.Schema({
-  userName: { type: String, unique: true,trim: true, minLength: 3 },
+  userName: { type: String, unique: true, trim: true, minLength: 3 },
 
   age: { type: Number, minLength: 18 },
 
-  email: { type: String, required: true, unique: true,trim: true,validate:{
-    validator: function (v) {
-        return /\S+@+\S+\.\S+/.test(v)  
-    } ,
-    message:"Please enter a valid email address"},
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true,
+    validate: {
+      validator: function (v) {
+        return /\S+@+\S+\.\S+/.test(v);
+      },
+      message: "Please enter a valid email address",
+    },
   },
-  password: { type: String, required: true ,trim: true,min: 6 },
+  password: { type: String, required: true, trim: true, min: 6 },
 
   profilePicture: { type: String },
 
   coverPicture: { type: String },
 
-  followAction:   { type: mongoose.Schema.Types.ObjectId, ref: "FollowUnfollow" },
+  followers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+  following: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
 
   role: { type: mongoose.Schema.Types.ObjectId, ref: "Role" },
-
 });
 
 userSchema.pre("save", async function () {

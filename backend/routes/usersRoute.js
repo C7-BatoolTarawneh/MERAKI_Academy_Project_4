@@ -9,8 +9,8 @@ const {
   updateUserProfilePicture,
   updateUserCoverPicture,
   deleteUser,
-  followUser,
-  unfollowUser,
+//   followUser,
+//   unfollowUser,
 } = require("../controllers/usersController");
 
 const authentication = require("../middleware/authentication");
@@ -47,17 +47,17 @@ usersRouter.put(
 );
 usersRouter.delete("/:id", authentication, authorization("DELETE"), deleteUser);
 
-usersRouter.put(
-  "/:id/follow",
-  authentication,
-  authorization("FOLLOW"),
-  followUser
-);
-usersRouter.put(
-  "/:id/unfollow",
-  authentication,
-  authorization("UNFOLLOW"),
-  unfollowUser
-);
+// usersRouter.put(
+//   "/:id/follow",
+//   authentication,
+//   authorization("FOLLOW"),
+//   followUser
+// );
+// usersRouter.put(
+//   "/:id/unfollow",
+//   authentication,
+//   authorization("UNFOLLOW"),
+//   unfollowUser
+// );
 
 module.exports = usersRouter;

@@ -24,8 +24,8 @@ const register = async (req, res) => {
       email,
       password,
       role: role,
-      followersCount: 0,
-      followingsCount: 0,
+      followers: [],
+      followings: [],
     });
 
     await user.save();
@@ -56,9 +56,6 @@ const register = async (req, res) => {
   }
 };
 
-module.exports = { register };
-
-// This function checks user login credentials
 const login = (req, res) => {
   const password = req.body.password;
   const email = req.body.email.toLowerCase();
@@ -85,26 +82,22 @@ const login = (req, res) => {
           user: result.userName,
           role: result.role,
         };
-
         const options = {
-          expiresIn: "60m",
+          expiresIn: "24h",
         };
         const token = jwt.sign(payload, process.env.SECRET, options);
         res.status(200).json({
           success: true,
           message: `Valid login credentials`,
+          user: result,
           token: token,
         });
       } catch (error) {
         throw new Error(error.message);
       }
     })
-    .catch((err) => {
-      res.status(500).json({
-        success: false,
-        message: `Server Error`,
-        err: err.message,
-      });
+    .catch((error) => {
+      throw new Error(error.message);
     });
 };
 
@@ -309,75 +302,124 @@ const deleteUser = async (req, res) => {
   }
 };
 
-// // This function adds a user to the followers list of another user
-// const followUser = async (req, res) => {
-//   // Get the ID of the user who is being followed from the request parameters
-//   const followedUserId = req.params.id;
-//   // Get the ID of the user who is following from the JWT token
-//   const followerUserId = req.token.userId;
+const followUser = async (req, res) => {
+  const followerId = req.token.userId;
+  const followingId = req.params.id;
 
-//   try {
-//     // Find the user who is being followed by their ID
-//     const followedUser = await userModel.findById(followedUserId);
-//     if (!followedUser) {
-//       return res.status(404).json({
-//         success: false,
-//         message: `User not found`,
-//       });
-//     }
-//     // Add the follower's ID to the followers list of the followed user
-//     followedUser.followers.push(followerUserId);
-//     // Save the updated user object
-//     await followedUser.save();
-//     res.status(200).json({
-//       success: true,
-//       message: `User ${followerUserId} is now following user ${followedUserId}`,
-//       user: followedUser,
-//     });
-//   } catch (err) {
-//     res.status(500).json({
-//       success: false,
-//       message: `Server Error`,
-//       err: err.message,
-//     });
-//   }
-// };
+  try {
+    const follower = await userModel.findById(followerId);
+    const following = await userModel.findById(followingId);
 
-// // This function removes a user from the followers list of another user
-// const unfollowUser = async (req, res) => {
-//   // Get the ID of the user who is being unfollowed from the request parameters
-//   const unfollowedUserId = req.params.id;
-//   // Get the ID of the user who is unfollowing from the JWT token
-//   const unfollowerUserId = req.token.userId;
+    if (!follower || !following) {
+      return res.status(404).json({
+        success: false,
+        message: `User not found`,
+      });
+    }
 
-//   try {
-//     // Find the user who is being unfollowed by their ID
-//     const unfollowedUser = await userModel.findById(unfollowedUserId);
-//     if (!unfollowedUser) {
-//       return res.status(404).json({
-//         success: false,
-//         message: `User not found`,
-//       });
-//     }
-//     // Remove the unfollower's ID from the followers list of the unfollowed user
-//     unfollowedUser.followers = unfollowedUser.followers.filter(
-//       (id) => id != unfollowerUserId
-//     );
-//     // Save the updated user object
-//     await unfollowedUser.save();
-//     res.status(200).json({
-//       success: true,
-//       message: `User ${unfollowerUserId} has unfollowed user ${unfollowedUserId}`,
-//       user: unfollowedUser,
-//     });
-//   } catch (err) {
-//     res.status(500).json({
-//       success: false,
-//       message: `Server Error`,
-//       err: err.message,
-//     });
-//   }
-// };
+    if (
+      follower.followings.includes(followingId) ||
+      following.followers.includes(followerId)
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: `You are already following this user`,
+      });
+    }
+
+    await Promise.all([
+      userModel.updateOne(
+        { _id: followerId },
+        { $addToSet: { followings: followingId } }
+      ),
+      userModel.updateOne(
+        { _id: followingId },
+        { $addToSet: { followers: followerId } }
+      ),
+    ]);
+
+    const updatedFollower = await userModel
+      .findById(followerId)
+      .populate("role", "-_id -__v");
+
+    const updatedFollowing = await userModel
+      .findById(followingId)
+      .populate("role", "-_id -__v");
+
+    res.status(200).json({
+      success: true,
+      message: `You are now following user with ID ${followingId}`,
+      follower: updatedFollower,
+      following: updatedFollowing,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: `Server Error`,
+      err: err.message,
+    });
+  }
+};
+
+// This function removes a user from the followers list of another user
+const unfollowUser = async (req, res) => {
+  const followerId = req.token.userId;
+  const followingId = req.params.id;
+
+  try {
+    const follower = await userModel.findById(followerId);
+    const following = await userModel.findById(followingId);
+
+    if (!follower || !following) {
+      return res.status(404).json({
+        success: false,
+        message: `User not found`,
+      });
+    }
+
+    if (
+      !follower.followings.includes(followingId) ||
+      !following.followers.includes(followerId)
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: `You are not following this user`,
+      });
+    }
+
+    await Promise.all([
+      userModel.updateOne(
+        { _id: followerId },
+        { $pull: { followings: followingId } }
+      ),
+      userModel.updateOne(
+        { _id: followingId },
+        { $pull: { followers: followerId } }
+      ),
+    ]);
+
+    const updatedFollower = await userModel
+      .findById(followerId)
+      .populate("role", "-_id -__v");
+
+    const updatedFollowing = await userModel
+      .findById(followingId)
+      .populate("role", "-_id -__v");
+
+    res.status(200).json({
+      success: true,
+      message: `You have unfollowed user with ID ${followingId}`,
+      follower: updatedFollower,
+      following: updatedFollowing,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: `Server Error`,
+      err: err.message,
+    });
+  }
+};
 
 module.exports = {
   register,
@@ -389,6 +431,6 @@ module.exports = {
   updateUserProfilePicture,
   updateUserCoverPicture,
   deleteUser,
-  // followUser,
-  // unfollowUser,
+  followUser,
+  unfollowUser,
 };

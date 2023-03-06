@@ -9,14 +9,15 @@ const {
   updateUserProfilePicture,
   updateUserCoverPicture,
   deleteUser,
-//   followUser,
-//   unfollowUser,
+  followUser,
+  unfollowUser,
 } = require("../controllers/usersController");
 
 const authentication = require("../middleware/authentication");
 const authorization = require("../middleware/authorization");
 
 const usersRouter = express.Router();
+
 usersRouter.post("/register", register);
 usersRouter.post("/login", login);
 usersRouter.get("/:id", getUserById);
@@ -47,17 +48,17 @@ usersRouter.put(
 );
 usersRouter.delete("/:id", authentication, authorization("DELETE"), deleteUser);
 
-// usersRouter.put(
-//   "/:id/follow",
-//   authentication,
-//   authorization("FOLLOW"),
-//   followUser
-// );
-// usersRouter.put(
-//   "/:id/unfollow",
-//   authentication,
-//   authorization("UNFOLLOW"),
-//   unfollowUser
-// );
+usersRouter.put(
+  "/follow/:id",
+  authentication,
+  authorization("FOLLOW"),
+  followUser
+);
+usersRouter.put(
+  "/unfollow/:id/",
+  authentication,
+  authorization("UNFOLLOW"),
+  unfollowUser
+);
 
 module.exports = usersRouter;

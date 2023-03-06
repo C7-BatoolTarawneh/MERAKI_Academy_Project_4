@@ -25,7 +25,8 @@ const userSchema = new mongoose.Schema({
   coverPicture: { type: String },
 
   followers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
-  following: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+  followings: [{ type: mongoose.Schema.Types.ObjectId, ref: "User"}],
+ 
 
   role: { type: mongoose.Schema.Types.ObjectId, ref: "Role" },
 });

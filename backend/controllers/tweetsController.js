@@ -1,6 +1,7 @@
 const tweetsModel = require("../models/tweets");
 const userModel = require("../models/users");
 const replyModel = require("../models/replies");
+const { deleteUser } = require("./usersController");
 
 const createNewTweet = (req, res) => {
   const { image, description } = req.body;
@@ -139,10 +140,70 @@ const deleteTweetById = (req, res) => {
     });
 };
 
+const deleteTweetByWriter = (req, res) => {
+  const writer = req.params.id;
+  tweetsModel
+    .deleteMany({ writer })
+    .then((result) => {
+        console.log(writer);
+      if (!result.deletedCount) {
+      return  res.status(404).json({ success: false, message: `writer not found` });
+      }
+      res.status(200).json({
+        success: true,
+        message: `this is the deleted tweet by ${writer}`,
+        });
+    })
+    .catch((err) => {
+      res
+        .status(500)
+        .json({ success: false, message: `Server Error`, err: err });
+    });
+};
+
+const likeTweet = (req, res) => {
+  const tweetId = req.params.id;
+  const userId = req.params.userId;
+  //search for the tweets with cpecific id
+  tweetsModel
+    .findById(tweetId)
+    .then((tweet) => {
+      if (!tweet) {
+        return res.status(404).json({
+          success: false,
+          message: `the tweet with the id => ${tweetId} not found`,
+        });
+      }
+      // check if it is liked or not, is user in likes array or not?
+      const alreadyLiked = tweet.likes.includes(userId);
+      if (alreadyLiked) {
+        tweet.likes.pull(userId);
+      } else {
+        tweet.likes.push(userId);
+      }
+
+      tweet.save().then((updatedTweet) => {
+        res.status(200).json({
+          success: true,
+          message: `Tweet ${alreadyLiked ? "unliked" : "liked"} `,
+          tweet: updatedTweet,
+        });
+      });
+    })
+    .catch((error) => {
+      res
+        .status(500)
+        .json({ success: false, message: `Server Error`, error: error.message });
+    });
+};
+
 module.exports = {
   createNewTweet,
   getTweetsByWriter,
   getAllTweets,
   updateTweetById,
   deleteTweetById,
+  deleteTweetByWriter,
+  likeTweet,
+  
 };

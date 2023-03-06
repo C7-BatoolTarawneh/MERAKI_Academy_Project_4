@@ -145,14 +145,16 @@ const deleteTweetByWriter = (req, res) => {
   tweetsModel
     .deleteMany({ writer })
     .then((result) => {
-        console.log(writer);
+      console.log(writer);
       if (!result.deletedCount) {
-      return  res.status(404).json({ success: false, message: `writer not found` });
+        return res
+          .status(404)
+          .json({ success: false, message: `writer not found` });
       }
       res.status(200).json({
         success: true,
         message: `this is the deleted tweet by ${writer}`,
-        });
+      });
     })
     .catch((err) => {
       res
@@ -163,7 +165,7 @@ const deleteTweetByWriter = (req, res) => {
 
 const likeTweet = (req, res) => {
   const tweetId = req.params.id;
-  const userId = req.params.userId;
+  const userId = req.token.userId;
   //search for the tweets with cpecific id
   tweetsModel
     .findById(tweetId)
@@ -175,12 +177,9 @@ const likeTweet = (req, res) => {
         });
       }
       // check if it is liked or not, is user in likes array or not?
-      const alreadyLiked = tweet.likes.includes(userId);
-      if (alreadyLiked) {
-        tweet.likes.pull(userId);
-      } else {
+     
         tweet.likes.push(userId);
-      }
+      
 
       tweet.save().then((updatedTweet) => {
         res.status(200).json({
@@ -193,7 +192,11 @@ const likeTweet = (req, res) => {
     .catch((error) => {
       res
         .status(500)
-        .json({ success: false, message: `Server Error`, error: error.message });
+        .json({
+          success: false,
+          message: `Server Error`,
+          error: error.message,
+        });
     });
 };
 
@@ -205,5 +208,4 @@ module.exports = {
   deleteTweetById,
   deleteTweetByWriter,
   likeTweet,
-  
 };

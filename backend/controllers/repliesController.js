@@ -8,13 +8,9 @@ const createNewReply = async (req,res)  => {
     try {
         const tweetId = req.params.id
         const userId = req.token.userId
-        const {reply,caption,replyImage} = req.body
+        const {caption,replyImage} = req.body
         //check if reply is empty or includes many of whitespace
-        console.log(typeOf(reply));
-        if(!reply || !reply.trim() || !caption ||!caption.trim() )
-        {
-            return res.status(404).json({success: false, message:"Reply content cannot be empty"})
-        }
+        
         //check if tweet exists
         const tweet = await tweetsModel.findById(tweetId)
         if (!tweet) {
@@ -23,9 +19,12 @@ const createNewReply = async (req,res)  => {
                 message: `The tweet the id => ${tweetId} is not found`
             })
         }
+        if( (!caption || !caption.trim()) && ( !replyImage || !replyImage.trim())) 
+        {
+            return res.status(400).json({success: false, message:"Reply content cannot be empty, caption or image or both are required"})
+        }
         //create reply
         const newReply = new replyModel({
-            reply,
             replyCreator:userId,
             caption,
             replyImage,

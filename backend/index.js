@@ -17,6 +17,10 @@ const repliesRouter = require("./routes/repliesRoute")
 app.use("/replies",repliesRouter);
 
 
+// let text = "      aa       ";
+// let result = text.trim();
+// console.log("text:",text)
+// console.log("result:",result)
 // Handles any other endpoints [unassigned - endpoints]
 app.use("*", (req, res) => res.status(404).json("NO content at this path"));
 

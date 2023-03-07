@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema({
       message: "Please enter a valid email address",
     },
   },
-  password: { type: String, required: true, trim: true, min: 6 },
+  password: { type: String, required: true, trim: true, min: 6 },//add more validations and constrains
 
   profilePicture: { type: String },
 

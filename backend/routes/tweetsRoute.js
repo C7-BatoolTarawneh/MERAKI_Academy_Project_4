@@ -6,7 +6,8 @@ const {
   updateTweetById,
   deleteTweetById,
   deleteTweetByWriter,
-  likeTweet
+  likeTweet,
+  unlikeTweet
 } = require("../controllers/tweetsController");
 
 const authentication = require("../middleware/authentication");
@@ -36,6 +37,13 @@ tweetsRouter.delete(
   authorization("DELETE_TWEET_BY_ID"),
   deleteTweetById
 );
-tweetsRouter.delete("/deletebywriter/:id",authentication, authorization("DELETE_TWEET_BY_WRITER"),deleteTweetByWriter)
-tweetsRouter.put("/like/:id",authentication,authorization("LIKE"), likeTweet)
+tweetsRouter.delete(
+  "/deletebywriter/:id",
+  authentication,
+  authorization("DELETE_TWEET_BY_WRITER"),
+  deleteTweetByWriter
+);
+tweetsRouter.put("/like/:id", authentication, authorization("LIKE"), likeTweet);
+tweetsRouter.put("/unlike/:id", authentication, authorization("UNLIKE"), unlikeTweet);
+
 module.exports = tweetsRouter;

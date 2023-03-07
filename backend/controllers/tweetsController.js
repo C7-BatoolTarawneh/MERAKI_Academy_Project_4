@@ -1,7 +1,6 @@
 const tweetsModel = require("../models/tweets");
 const userModel = require("../models/users");
 const replyModel = require("../models/replies");
-const { deleteUser } = require("./usersController");
 
 const createNewTweet = (req, res) => {
   const { image, description } = req.body;
@@ -177,14 +176,18 @@ const likeTweet = (req, res) => {
         });
       }
       // check if it is liked or not, is user in likes array or not?
-     
+      const alreadyLiked = tweet.likes.includes(userId);
+      if (alreadyLiked) {
+        console.log("aaa");
+        return res.status(404).json({ success: false, message:`the tweet already liked by ${userId}`})
+      } 
         tweet.likes.push(userId);
       
 
       tweet.save().then((updatedTweet) => {
         res.status(200).json({
           success: true,
-          message: `Tweet ${alreadyLiked ? "unliked" : "liked"} `,
+          message: `Tweet liked`,
           tweet: updatedTweet,
         });
       });
@@ -200,6 +203,48 @@ const likeTweet = (req, res) => {
     });
 };
 
+const unlikeTweet = (req, res) => {
+    const tweetId = req.params.id;
+    const userId = req.token.userId;
+    //search for the tweets with specific id
+    tweetsModel
+      .findById(tweetId)
+      .then((tweet) => {
+        if (!tweet) {
+          return res.status(404).json({
+            success: false,
+            message: `the tweet with the id => ${tweetId} not found`,
+          });
+        }
+        // check if it is liked or not, is user in likes array or not?
+        const alreadyLiked = tweet.likes.includes(userId);
+        if (!alreadyLiked) {
+          return res.status(400).json({
+            success: false,
+            message: `The tweet is not liked by the user`,
+          });
+        }
+        tweet.likes = tweet.likes.filter((id) => id.toString() !== userId);
+  
+        tweet.save().then((updatedTweet) => {
+          res.status(200).json({
+            success: true,
+            message: `Tweet unliked`,
+            tweet: updatedTweet,
+          });
+        });
+      })
+      .catch((error) => {
+        res.status(500).json({
+          success: false,
+          message: `Server Error`,
+          error: error.message,
+        });
+      });
+  };
+  
+  
+
 module.exports = {
   createNewTweet,
   getTweetsByWriter,
@@ -208,4 +253,5 @@ module.exports = {
   deleteTweetById,
   deleteTweetByWriter,
   likeTweet,
+  unlikeTweet
 };

@@ -13,6 +13,9 @@ const usersRouter = require("./routes/usersRoute")
 app.use("/users",usersRouter);
 const tweetsRouter = require("./routes/tweetsRoute")
 app.use("/tweets",tweetsRouter);
+const repliesRouter = require("./routes/repliesRoute")
+app.use("/replies",repliesRouter);
+
 
 // Handles any other endpoints [unassigned - endpoints]
 app.use("*", (req, res) => res.status(404).json("NO content at this path"));

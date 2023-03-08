@@ -15,7 +15,8 @@ const tweetsRouter = require("./routes/tweetsRoute")
 app.use("/tweets",tweetsRouter);
 const repliesRouter = require("./routes/repliesRoute")
 app.use("/replies",repliesRouter);
-
+const retweetRouter = require("./routes/retweetRoute");
+app.use("/retweet",retweetRouter);
 
 // let text = "      aa       ";
 // let result = text.trim();

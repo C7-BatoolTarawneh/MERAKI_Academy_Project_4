@@ -9,6 +9,7 @@ const repliesSchema = new mongoose.Schema({
         },
     }},
     replyImage: { type: String }, 
+    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" ,unique :true}],
 
   });
   

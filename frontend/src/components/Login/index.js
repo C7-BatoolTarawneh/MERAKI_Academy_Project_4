@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState,useContext } from "react";
 import {Link,useNavigate} from "react-router-dom"
-
+import { UserContext } from "../../App";
 import axios from "axios";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -17,42 +17,31 @@ import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { fontFamily } from "@mui/system";
 
-const Register = () => {
-  const [userName, setUserName] = useState("");
-  const [age, setAge] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [message, setMessage] = useState({ text: "", show: false });
-  const role = "640493a04bc598bcd351f584";
+
+
+
+const Login = () => {
+const [email, setEmail] = useState("")
+const [password, setPassword] = useState("")
+const [message, setMessage] = useState("")
 
 const navigate = useNavigate()
-
-
-  // now lets register
-  const handleregister = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post(
-        "http://localhost:5000/users/register",
-        {
-          userName,
-          age,
-          password,
-          email,
-          role,
-        }
-      );
-      if (age <18){
-        setMessage({text : "you are not allowed to register, you must be at least 18 years old" ,show: true});
-        return false
-      }
-
-      setMessage({ text: response.data.message, show: true });
-    } catch (error) {
-      setMessage({ text: error.response.data.message, show: true });
-    }
-  };
-  const theme = createTheme();
+const {handleLogin} = useContext(UserContext)
+const handleLoginClick = async (e) => {
+  e.preventDefault();
+  try {
+    const response = await axios.post ("http://localhost:5000/users/login/",{
+      email,
+      password
+    })
+    const {token} = response.data
+    handleLogin(token)
+  }
+  catch (error){
+    setMessage({ text: error.response.data.message, show: true });
+  }
+}
+const theme = createTheme();
 
   return (
     <ThemeProvider theme={theme}>
@@ -93,34 +82,11 @@ const navigate = useNavigate()
               variant="h5"
               sx={{ fontFamily: "sans-serif" }}
             >
-              Register
+              Login
             </Typography>
             <Box component="form" noValidate sx={{ mt: 1 }}>
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="username"
-                label="User Name"
-                name="username"
-                autoComplete="userName"
-                autoFocus
-                onChange={(e) => {
-                  console.log(e.target.value);
-                  setUserName(e.target.value);
-                }}
-              />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="age"
-                type="number"
-                name="Age"
-                label="Age"
-                onChange={(e) => setAge(e.target.value)}
-              />
-              <TextField
+              
+               <TextField
                 margin="normal"
                 required
                 fullWidth
@@ -130,7 +96,7 @@ const navigate = useNavigate()
                 autoComplete="email"
                 // autoFocus
                 onChange={(e) => {
-                  console.log(e.target.value);
+                  // console.log(e.target.value);
                   setEmail(e.target.value);
                 }}
               />
@@ -157,14 +123,14 @@ const navigate = useNavigate()
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
-                onClick={handleregister}
+                onClick={handleLoginClick}
               >
-                register
+                Login
               </Button>
               <Grid container>
                 <Grid item>
                   <p variant="body2">
-                    {"Do you have an account?"} <Link to="/login" > Login 
+                    {"Don`t you have an account?"} <Link to="/register" > Register 
                     </Link>
                   </p>
                 </Grid>
@@ -174,7 +140,8 @@ const navigate = useNavigate()
         </Grid>
       </Grid>
     </ThemeProvider>
-  );
-};
+  )
+}
 
-export default Register;
+export default Login
+

@@ -2,6 +2,42 @@ const tweetsModel = require("../models/tweets");
 const userModel = require("../models/users");
 const replyModel = require("../models/replies");
 
+/*const createNewTweet = (req, res) => {
+  const { image, description } = req.body;
+  const writer = req.token.userId;
+  console.log("REQUEST TOCK: ",req.token)
+  const newTweet = new tweetsModel({
+    image,
+    description,
+    writer,
+  });
+
+  newTweet
+    .save()
+    
+    .then((tweet) => {
+      
+      res.status(201).json({
+        success: true,
+        message: `Tweet created`,
+        tweet: tweet,
+
+       
+        
+      });
+      console.log("RESSSSSSS::  ",res)
+    })
+
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        message: `Server Error`,
+        err: err.message,
+      });
+    });
+};*/
+
+
 const createNewTweet = (req, res) => {
   const { image, description } = req.body;
   const writer = req.token.userId;
@@ -14,12 +50,36 @@ const createNewTweet = (req, res) => {
   newTweet
     .save()
     .then((tweet) => {
-      // console.log("Tweet")
-      res.status(201).json({
-        success: true,
-        message: `Tweet created`,
-        tweet: tweet,
-      });
+      // Fetch the writer's User document to get the username
+      userModel
+        .findById(writer)
+        .select("userName profilePicture")
+        .then((user) => {
+          res.status(201).json({
+            success: true,
+            message: `Tweet created`,
+            tweet: {
+              _id: tweet._id,
+              image: tweet.image,
+              description: tweet.description,
+              writer: tweet.writer,
+              writerUserName: user.userName, // include the writer's username in the response
+              writerProfilePicture: user.profilePicture, // include the writer's profile picture in the response
+              reply: tweet.reply,
+              likes: tweet.likes,
+              retweet: tweet.retweet,
+              createdAt: tweet.createdAt,
+              updatedAt: tweet.updatedAt,
+            },
+          });
+        })
+        .catch((err) => {
+          res.status(500).json({
+            success: false,
+            message: `Server Error`,
+            err: err.message,
+          });
+        });
     })
     .catch((err) => {
       res.status(500).json({
@@ -30,8 +90,10 @@ const createNewTweet = (req, res) => {
     });
 };
 
+
 const getTweetsByWriter = (req, res) => {
   let userId = req.query.writer;
+  
 
   tweetsModel
     .find({ writer: userId })
@@ -57,12 +119,53 @@ const getTweetsByWriter = (req, res) => {
     });
 };
 
+/*
 const getAllTweets = (req, res) => {
   const userId = req.token.userId;
+  
   tweetsModel
     .find()
     .populate("reply", "-_id -__v")
-    .exec()
+    .then((tweets) => {
+      if (tweets.length) {
+        res.status(200).json({
+          success: true,
+          message: "All tweets ",
+          userId: userId,
+          tweets: tweets,
+          
+        });
+        console.log("RESSS: " ,tweets[0].writer.userName)
+      } else {
+        res.status(200).json({ success: false, message: "no tweets so far" });
+      }
+    })
+    // console.log(res)
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        message: `Server Error`,
+        err: err.message,
+      });
+    });
+};
+*/
+
+const getAllTweets = (req, res) => {
+  const userId = req.token.userId;
+
+  tweetsModel
+    .find()
+    .populate([
+      {
+        path: "reply",
+        select: "-_id -__v",
+      },
+      {
+        path: "writer",
+        select: "userName profilePicture", // include the profile picture field in the response
+      },
+    ])
     .then((tweets) => {
       if (tweets.length) {
         res.status(200).json({
@@ -83,6 +186,8 @@ const getAllTweets = (req, res) => {
       });
     });
 };
+
+
 
 const updateTweetById = (req, res) => {
   const id = req.params.id;

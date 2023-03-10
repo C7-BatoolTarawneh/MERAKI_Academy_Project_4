@@ -6,7 +6,7 @@ const bcrypt = require("bcrypt");
 
 //register
 const register = async (req, res) => {
-  const { userName, age, email, password, role } = req.body;
+  const { userName,profilePicture, age, email, password, role } = req.body;
 
   try {
     // Check if role with given ID exists
@@ -17,17 +17,25 @@ const register = async (req, res) => {
         message: `Role with ID ${role} not found`,
       });
     }
+    if (age < 18) {
+      return res.status(400).json({
+        success: false,
+        message: `User must be at least 18 years old to register`,
+      });
+    }
 
     const user = new userModel({
       userName,
       age,
       email,
       password,
+      profilePicture,
       role: role,
       followers: [],
       followings: [],
     });
 
+    
     await user.save();
 
     res.status(201).json({
@@ -42,12 +50,7 @@ const register = async (req, res) => {
         message: `The email already exists`,
       });
     }
-    if (age < 18) {
-      return res.status(400).json({
-        success: false,
-        message: `User must be at least 18 years old to register`,
-      });
-    }
+    
     res.status(500).json({
       success: false,
       message: `Server Error`,

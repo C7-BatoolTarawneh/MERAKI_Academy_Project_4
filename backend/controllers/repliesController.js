@@ -3,53 +3,57 @@ const tweetsModel = require("../models/tweets");
 
 // twitter should accept text or picture to be sent
 
-const createNewReply = async (req,res)  => {
+const createNewReply = async (req, res) => {
   try {
-      const tweetId = req.params.id
-      const userId = req.token.userId
-      const {caption,replyImage} = req.body
-      //check if reply is empty or includes many of whitespace
-      
-      //check if tweet exists
-      const tweet = await tweetsModel.findById(tweetId)
-      if (!tweet) {
-          return res.status(404).json({
-              success: false,
-              message: `The tweet the id => ${tweetId} is not found`
-          })
-      }
-      if( (!caption || !caption.trim()) && ( !replyImage || !replyImage.trim())) 
-      {
-          return res.status(400).json({success: false, message:"Reply content cannot be empty, caption or image or both are required"})
-      }
-      //create reply
-      const newReply = new replyModel({
-          replyCreator:userId,
-          caption,
-          replyImage,
-      })
-      await newReply.save()
-      // add the reply to the tweet
-      tweet.reply.push(newReply._id)
-      await tweet.save()
+    const tweetId = req.params.id;
+    const userId = req.token.userId;
+    const { caption, replyImage } = req.body;
+    //check if reply is empty or includes many of whitespace
 
-      res.status(201).json({success:true,message: "Reply created successfully",reply: newReply})
-  }
-  catch(error) {
-      console.log("aaa");
-      res.status(500).json({
+    //check if tweet exists
+    const tweet = await tweetsModel.findById(tweetId);
+    if (!tweet) {
+      return res.status(404).json({
+        success: false,
+        message: `The tweet the id => ${tweetId} is not found`,
+      });
+    }
+    if ((!caption || !caption.trim()) && (!replyImage || !replyImage.trim())) {
+      return res
+        .status(400)
+        .json({
           success: false,
-          message: `Server Error`,
-          error: error.message,
+          message:
+            "Reply content cannot be empty, caption or image or both are required",
         });
-          }
+    }
+    //create reply
+    const newReply = new replyModel({
+      replyCreator: userId,
+      caption,
+      replyImage,
+    });
+    await newReply.save();
+    // add the reply to the tweet
+    tweet.reply.push(newReply._id);
+    await tweet.save();
 
-
-      
+    res
+      .status(201)
+      .json({
+        success: true,
+        message: "Reply created successfully",
+        reply: newReply,
+      });
+  } catch (error) {
+    console.log("aaa");
+    res.status(500).json({
+      success: false,
+      message: `Server Error`,
+      error: error.message,
+    });
   }
-
-
-
+};
 
 // const replyOfReply = async (req, res) => {
 //   try {
@@ -87,7 +91,7 @@ const createNewReply = async (req,res)  => {
 //       },
 //     });
 
-    // Return the updated reply with the new reply added to its replies array
+// Return the updated reply with the new reply added to its replies array
 //     const replies = updatedReply.reply.map((r) => ({
 //       _id: r._id,
 //       caption: r.caption,
@@ -114,7 +118,7 @@ const getRepliesByTweetId = async (req, res) => {
       });
     }
     const tweet = await tweetsModel.findById(tweetId).populate("reply");
-    console.log('tweet:', tweet);
+    console.log("tweet:", tweet);
 
     if (!tweet) {
       return res.status(404).json({
@@ -135,7 +139,6 @@ const getRepliesByTweetId = async (req, res) => {
     });
   }
 };
-
 
 const likeReply = async (req, res) => {
   try {
@@ -178,7 +181,6 @@ const likeReply = async (req, res) => {
     });
   }
 };
-
 
 const unlikeReply = async (req, res) => {
   try {
@@ -265,7 +267,6 @@ const updateReply = async (req, res) => {
   }
 };
 
-
 const deleteReplyByTweetIdAndReplyId = async (req, res) => {
   try {
     const tweetId = req.params.tweetId;
@@ -325,16 +326,11 @@ const deleteReplyByTweetIdAndReplyId = async (req, res) => {
   }
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-module.exports = { createNewReply,getRepliesByTweetId,likeReply,unlikeReply,updateReply,deleteReplyByTweetIdAndReplyId };
+module.exports = {
+  createNewReply,
+  getRepliesByTweetId,
+  likeReply,
+  unlikeReply,
+  updateReply,
+  deleteReplyByTweetIdAndReplyId,
+};

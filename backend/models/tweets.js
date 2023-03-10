@@ -9,7 +9,7 @@ const tweetsSchema = new mongoose.Schema(
       required: true,
     },
     reply: [{ type: mongoose.Schema.Types.ObjectId, ref: "Reply" }],
-    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" ,unique :true}],
+    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     retweet: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     image: { type: String }, 
 },

@@ -4,6 +4,7 @@ import React , {useState,useEffect,createContext,useContext} from "react"
 import Register from "./components/Register";
 import Login from "./components/Login";
 import Home from "./components/Home";
+import TweetCard from "./components/TweetCard";
 // import '@fontsource/roboto/300.css';
 // import '@fontsource/roboto/400.css';
 // import '@fontsource/roboto/500.css';

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
+
 import { Link, useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import Card from "@mui/material/Card";
@@ -15,7 +16,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import { Modal, Box, TextField, Button } from "@mui/material";
+import { Modal, Box, TextField, Button,FormControl, InputLabel, Input } from "@mui/material";
 
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -28,17 +29,48 @@ const TweetCard = () => {
   const [tweets, setTweets] = useState([]);
   const { isLoggedIn, token, user } = useContext(UserContext);
   const [userId, setUserId] = useState("");
-//   const{tweetId} = useParams()
-const [updatedTweet, setUpdatedTweet] = useState({description:"",image:""})
-const [tweetId, setTweetId] = useState("");
-const [isUpdating,setIsUpdating] = useState("")
- //states for image anddescription
-//  const [tweetDescription, setTweetDescription] = useState("");
-//  const [tweetImage, setTweetImage] = useState(null);
+  //   const{tweetId} = useParams()
+  const [updatedTweet, setUpdatedTweet] = useState({
+    description: "",
+    image: "",
+  });
+  const [tweetId, setTweetId] = useState("");
+  const [isUpdating, setIsUpdating] = useState("");
 
-    //anchorEl is used to control whether the Menu component is displayed or hidden.
+  //anchorEl is used to control whether the Menu component is displayed or hidden.
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedTweet, setSelectedTweet] = useState(null);
+
+  //initialize the cloudenary component
+  const [imagee, setImagee] = useState("");
+  const [url, setUrl] = useState("");
+
+
+  
+  const uploadImage = async () => {
+    const data = new FormData();
+    data.append("file", imagee);
+    data.append("upload_preset", "a1dhlskc");
+    data.append("cloud_name", "dnpshl3op");
+  
+    try {
+      const resp = await fetch(
+        "https://api.cloudinary.com/v1_1/dnpshl3op/image/upload",
+        {
+          method: "put",
+          body: data,
+        }
+      );
+      const json = await resp.json();
+      setUrl(json.url); // update the url state here
+      console.log("json: ", json);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  
+  
+
   //to monitore the modal state is shown or hidden
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleMenuClose = () => {
@@ -51,15 +83,13 @@ const [isUpdating,setIsUpdating] = useState("")
   };
 
   //open the modal when the EditIcon is clicked
-  
+
   // if modal close
   const handleModalClose = () => {
     setIsModalOpen(false);
   };
 
-
   const getAllTweets = async () => {
-    
     try {
       const response = await axios.get("http://localhost:5000/tweets", {
         headers: {
@@ -96,21 +126,18 @@ const [isUpdating,setIsUpdating] = useState("")
     }
   };
 
- 
-  
-//handle edit
-const handleEditTweetSubmit = async (e) => {
-    
+  //handle edit
+  /*const handleEditTweetSubmit = async (e) => {
     e.preventDefault();
     console.log(tweetId);
     console.log(tweetId);
-    console.log(e)
+    console.log(e);
     try {
       const response = await axios.put(
         `http://localhost:5000/tweets/update/${tweetId}`,
         {
           description: updatedTweet.description,
-          image: updatedTweet.image,
+          image: url,
         },
         {
           headers: {
@@ -119,17 +146,69 @@ const handleEditTweetSubmit = async (e) => {
         }
       );
       if (response.data.success) {
-        const updatedTweets = tweets.map((tweet) =>{if(tweet._id === tweetId)
-        {
-            return {...tweet,description: updatedTweet.description,image: updatedTweet.image}
-        }
-    return tweet
-})
-          
-       
+        const updatedTweets = tweets.map((tweet) => {
+          if (tweet._id === tweetId) {
+            return {
+              ...tweet,
+              description: updatedTweet.description,
+              image: url,
+            };
+          }
+          return tweet;
+        });
+
         setTweets(updatedTweets);
-        setIsUpdating(false)
-        setUpdatedTweet({description:"",image:""})
+        setIsUpdating(false);
+        setUpdatedTweet({ description: "", image: "" });
+        setAnchorEl(null);
+        setIsModalOpen(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };*/
+
+
+
+
+  const handleEditTweetSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const tweetData = {
+        description: updatedTweet.description,
+        image: url,
+      };
+  
+      // Only add the image field to the tweetData object if an image was uploaded
+      if (imagee) {
+        await uploadImage();
+        tweetData.image = url;
+      }
+  
+      const response = await axios.put(
+        `http://localhost:5000/tweets/update/${tweetId}`,
+        tweetData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.data.success) {
+        const updatedTweets = tweets.map((tweet) => {
+          if (tweet._id === tweetId) {
+            return {
+              ...tweet,
+              description: updatedTweet.description,
+              image: url || tweet.image,
+            };
+          }
+          return tweet;
+        });
+  
+        setTweets(updatedTweets);
+        setIsUpdating(false);
+        setUpdatedTweet({ description: "", image: "" });
         setAnchorEl(null);
         setIsModalOpen(false);
       }
@@ -138,16 +217,20 @@ const handleEditTweetSubmit = async (e) => {
     }
   };
   
+
+
+
+
+
+
+
+
   const handleEditTweetClick = (tweet) => {
-    // setTweetDescription(tweet.description);
-    // console.log(tweet.description)
-    // setTweetImage(tweet.image);
-    // setSelectedTweet(tweet);
-    setIsUpdating(true)
-    setUpdatedTweet({description:tweet.description,image:tweet.image})
+    setIsUpdating(true);
+    setUpdatedTweet({ description: tweet.description, image: tweet.image });
     setIsModalOpen(true);
     setTweetId(tweet._id);
-    console.log(tweet._id)
+    console.log(tweet._id);
   };
 
   useEffect(() => {
@@ -156,7 +239,6 @@ const handleEditTweetSubmit = async (e) => {
 
   const renderTweets = () => {
     return tweets.map((tweet) => (
-       
       <div className="card-pos" key={tweet._id}>
         <Card sx={{ maxWidth: 600 }}>
           <CardHeader
@@ -188,6 +270,7 @@ const handleEditTweetSubmit = async (e) => {
               width="auto"
               height="auto"
               image={tweet.image}
+              src={url}
               alt="Tweet image"
             />
           )}
@@ -228,7 +311,10 @@ const handleEditTweetSubmit = async (e) => {
               </MenuItem>
               <MenuItem>
                 <ListItemIcon>
-                  <EditIcon fontSize="small" onClick={()=>handleEditTweetClick(tweet)} />
+                  <EditIcon
+                    fontSize="small"
+                    onClick={() => handleEditTweetClick(tweet)}
+                  />
                 </ListItemIcon>
                 <Typography variant="inherit" noWrap>
                   Update Tweet
@@ -238,55 +324,56 @@ const handleEditTweetSubmit = async (e) => {
           )}
         </Menu>
         <Modal open={isModalOpen} onClose={handleModalClose}>
-  <Box
-    sx={{
-      position: "absolute",
-      top: "50%",
-      left: "50%",
-      transform: "translate(-50%, -50%)",
-      width: 400,
-      bgcolor: "background.paper",
-      boxShadow: 24,
-      p: 4,
-    }}
-  >
-    <form onSubmit= {(E)=>{handleEditTweetSubmit(E)}}>
-      <TextField
-        label="Description"
-        fullWidth
-        multiline
-        rows={4}
-        value={updatedTweet.description}
-        onChange={(event) => setUpdatedTweet({...updatedTweet,description:event.target.value})}
-      />
-      <input
-        accept="image/*"
-        id="tweet-image-upload"
-        type="file"
-        onChange={(event) => setUpdatedTweet({...updatedTweet,image:event.target.value})}
-      />
-      {/* <label htmlFor="tweet-image-upload">
-        <Button variant="contained" component="span">
-          Upload Image
-        </Button>
-      </label> */}
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: 400,
+              bgcolor: "background.paper",
+              boxShadow: 24,
+              p: 4,
+            }}
+          >
+            <form
+              onSubmit={(e) => {
+                handleEditTweetSubmit(e);
+              }}
+              onClick={uploadImage}
+            >
+              <TextField
+                label="Description"
+                fullWidth
+                multiline
+                rows={4}
+                value={updatedTweet.description}
+                onChange={(event) =>
+                  setUpdatedTweet({
+                    ...updatedTweet,
+                    description: event.target.value,
+                  })
+                }
+              />
+              <input
+                accept="image/*"
+                id="tweet-image-upload"
+                type="file"
+                onChange={(event) => setImagee(event.target.files[0])}
 
-      <Button variant="contained" type="submit" >
-        Save Changes
-      </Button>
-    </form>
-  </Box>
-</Modal>
+              />
 
+              <Button variant="contained" type="submit">
+                Save Changes
+              </Button>
+            </form>
+          </Box>
+        </Modal>
       </div>
-      //   </div>
     ));
-    
-    
   };
 
   return <div>{renderTweets()}</div>;
- 
 };
 
 export default TweetCard;

@@ -13,6 +13,8 @@ import Typography from "@mui/material/Typography";
 import { red } from "@mui/material/colors";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -23,12 +25,27 @@ import { UserContext } from "../../App";
 import "./style.css";
 
 const TweetCard = () => {
-
   const [tweets, setTweets] = useState([]);
-  const { isLoggedIn, token } = useContext(UserContext);
+  const { isLoggedIn, token ,user} = useContext(UserContext);
   const [userId, setUserId] = useState("");
+  //anchorEl is used to control whether the Menu component is displayed or hidden.
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [selectedTweet, setSelectedTweet] = useState(null);
 
-  const { tweetId } = useParams();
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+  
+//   const handleMenuClick = (event, tweet) => {
+//     setSelectedTweet(tweet);
+//     setAnchorEl(event.currentTarget);
+//   };
+
+  const handleMenuClick = (event, tweet) => {
+    setSelectedTweet(tweet);
+    setAnchorEl(event.currentTarget);
+  };
 
   const getAllTweets = async () => {
     try {
@@ -40,28 +57,63 @@ const TweetCard = () => {
       console.log("response.data: ", response.data);
       setTweets(response.data.tweets);
       setUserId(response.data.userId);
+
     } catch (err) {
       console.log(err);
     }
   };
-  const handleDeleteTweet = async (tweetId) => {
+
+
+  /*const handleDeleteTweet = async (tweetId) => {
     try {
-      const response = await axios.delete(`http://localhost:5000/tweets/delete/${tweetId}`)
-       
-        if (response.data.success){
-          const deletedItem =tweets.filter((el)=>{
+        const response = await axios.delete(
+          `http://localhost:5000/tweets/delete/${tweetId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+      if (response.data.success) {
+        const deletedItem = tweets.filter((t) => {
+          return t._id !== tweetId;
           
-            return el._id !== tweetId
-          })
-          console.log(deletedItem)
-          setTweets(deletedItem)}
-      
-      
-      console.log(response);
+        });
+        console.log(deletedItem);
+        setTweets(deletedItem);
+        setSelectedTweet(null);
+        setAnchorEl(null);
+      }
+
+    } catch (error) {
+      console.log(error);
+    }
+  };*/
+  
+  const handleDeleteTweet = async () => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:5000/tweets/delete/${selectedTweet._id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.data.success) {
+        setTweets((prevTweets) => {
+          return prevTweets.filter((tweet) => tweet._id !== selectedTweet._id);
+        });
+        setSelectedTweet(null);
+        setAnchorEl(null);
+      }
     } catch (error) {
       console.log(error);
     }
   };
+  
+  
+  
   useEffect(() => {
     getAllTweets();
   }, []);
@@ -80,9 +132,16 @@ const TweetCard = () => {
               </Avatar>
             }
             action={
-              <IconButton aria-label="settings">
-                <MoreVertIcon />
-              </IconButton>
+            
+              isLoggedIn &&
+              tweet.writer._id === userId && (
+                <IconButton
+                  aria-label="settings"
+                  onClick={(event) => handleMenuClick(event, tweet)}
+                >
+                  <MoreVertIcon />
+                </IconButton>
+              )
             }
             title={`${tweet.writer.userName} `}
             subheader={new Date(tweet.createdAt).toLocaleString()}
@@ -110,7 +169,40 @@ const TweetCard = () => {
             </IconButton>
           </CardActions>
         </Card>
+       
+        <Menu
+          id="simple-menu"
+          anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl) && selectedTweet?._id === tweet._id}
+        onClose={handleMenuClose}
+          
+        >
+          {tweet?.writer._id === userId && (
+            <div>
+              <MenuItem >
+              
+                <ListItemIcon  >
+                  <DeleteIcon  fontSize="small" onClick={()=>handleDeleteTweet(tweet._id)} />
+                </ListItemIcon>
+                <Typography variant="inherit" noWrap>
+                  Delete Tweet
+                </Typography>
+              </MenuItem>
+                <MenuItem>
+                  <ListItemIcon>
+                    <EditIcon fontSize="small" />
+                  </ListItemIcon>
+                  <Typography variant="inherit" noWrap>
+                    Update Tweet
+                  </Typography>
+                </MenuItem>
+             
+            </div>
+          )}
+        </Menu>
       </div>
+      //   </div>
     ));
   };
 

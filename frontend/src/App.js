@@ -4,6 +4,7 @@ import React , {useState,useEffect,createContext,useContext} from "react"
 import Register from "./components/Register";
 import Login from "./components/Login";
 import Home from "./components/Home";
+import LeftNavbar from "./components/LeftNavbar";
 import TweetCard from "./components/TweetCard";
 // import '@fontsource/roboto/300.css';
 // import '@fontsource/roboto/400.css';
@@ -33,6 +34,7 @@ function App() {
       navigate("/login")
     }
   },[token])
+
   return (
     <UserContext.Provider value={{isLoggedIn,token,handleLogin}}>
     <div className="App">
@@ -40,7 +42,7 @@ function App() {
       <Routes>
      <Route path="/register" element={<Register/>} />
      <Route path="/login" element={<Login />} />
-     <Route path="/Home" element={<Home/>} />
+     <Route path="/Home" element={<Home/>}  />
         </Routes>
        
     </div>

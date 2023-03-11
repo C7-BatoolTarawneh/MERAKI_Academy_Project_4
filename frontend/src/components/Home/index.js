@@ -11,10 +11,13 @@ const Home = () => {
  
 
   return (
+    
+  
     <div>Home
       <LeftNavbar/>
       <TweetCard/>
 </div>
+
   )
 }
 

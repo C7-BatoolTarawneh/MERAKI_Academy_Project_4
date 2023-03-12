@@ -17,13 +17,14 @@ import ShareIcon from "@mui/icons-material/Share";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { Modal, Box, TextField, Button,FormControl, InputLabel, Input } from "@mui/material";
-import Reply from "../Reply";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { UserContext } from "../../App";
 import LikeButton from "../LikeButton";
+import ReplyButton from "../ReplyButton";
+
 import "./style.css";
 
 const TweetCard = () => {
@@ -141,11 +142,8 @@ const TweetCard = () => {
         image: url,
       };
   
-      // Only add the image field to the tweetData object if an image was uploaded
-      // if (imagee) {
-      //   await uploadImage();
-      //   tweetData.image = url;
-      // }
+      
+      
   
       const response = await axios.put(
         `http://localhost:5000/tweets/update/${tweetId}`,
@@ -179,13 +177,6 @@ const TweetCard = () => {
     }
   };
   
-
-
-
-
-
-
-
 
   const handleEditTweetClick = (tweet) => {
     setIsUpdating(true);
@@ -246,7 +237,7 @@ const TweetCard = () => {
               <LikeButton tweet={tweet} />
             </IconButton>
             <IconButton aria-label="share">
-              <ChatBubbleOutlineRoundedIcon  />
+              <ReplyButton tweet={tweet}  />
             </IconButton>
           </CardActions>
          

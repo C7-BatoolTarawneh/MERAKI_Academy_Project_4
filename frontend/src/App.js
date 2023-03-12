@@ -1,15 +1,12 @@
 import "./App.css";
-import { Routes, Route, useParams, Link, useNavigate} from "react-router-dom"
-import React , {useState,useEffect,createContext,useContext} from "react"
+import { Routes, Route, useParams, Link, useNavigate,useHistory} from "react-router-dom"
+import React , {useState,useEffect,createContext,useContext,} from "react"
 import Register from "./components/Register";
 import Login from "./components/Login";
 import Home from "./components/Home";
 import LeftNavbar from "./components/LeftNavbar";
 import TweetCard from "./components/TweetCard";
-// import '@fontsource/roboto/300.css';
-// import '@fontsource/roboto/400.css';
-// import '@fontsource/roboto/500.css';
-// import '@fontsource/roboto/700.css';
+import LikeButton from "./components/LikeButton";
 
 export const UserContext = createContext()
 function App() {
@@ -23,6 +20,14 @@ function App() {
   localStorage.setItem("token", newToken)
   navigate("Home")
   }
+  const handleLogout = () => {
+    setToken("");
+    setIsLoggedIn(false)
+
+    localStorage.removeItem("token")
+    navigate("Login")
+   
+  };
 
   useEffect(() =>{
     setToken(localStorage.getItem("token"))
@@ -36,7 +41,7 @@ function App() {
   },[token])
 
   return (
-    <UserContext.Provider value={{isLoggedIn,token,handleLogin}}>
+    <UserContext.Provider value={{isLoggedIn,token,handleLogin,handleLogout}}>
     <div className="App">
    
       <Routes>

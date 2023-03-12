@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-
+import ChatBubbleOutlineRoundedIcon from '@mui/icons-material/ChatBubbleOutlineRounded';
 import { Link, useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import Card from "@mui/material/Card";
@@ -17,12 +17,13 @@ import ShareIcon from "@mui/icons-material/Share";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { Modal, Box, TextField, Button,FormControl, InputLabel, Input } from "@mui/material";
-
+import Reply from "../Reply";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { UserContext } from "../../App";
+import LikeButton from "../LikeButton";
 import "./style.css";
 
 const TweetCard = () => {
@@ -47,7 +48,8 @@ const TweetCard = () => {
 
 
   
-  const uploadImage = async () => {
+  const uploadImage = async (e) => {
+    e.preventDefault()
     const data = new FormData();
     data.append("file", imagee);
     data.append("upload_preset", "a1dhlskc");
@@ -57,12 +59,13 @@ const TweetCard = () => {
       const resp = await fetch(
         "https://api.cloudinary.com/v1_1/dnpshl3op/image/upload",
         {
-          method: "put",
+          method: "post",
           body: data,
         }
       );
       const json = await resp.json();
       setUrl(json.url); // update the url state here
+      handleEditTweetSubmit(json.url)
       console.log("json: ", json);
     } catch (err) {
       console.log(err);
@@ -126,53 +129,12 @@ const TweetCard = () => {
     }
   };
 
-  //handle edit
-  /*const handleEditTweetSubmit = async (e) => {
-    e.preventDefault();
-    console.log(tweetId);
-    console.log(tweetId);
-    console.log(e);
-    try {
-      const response = await axios.put(
-        `http://localhost:5000/tweets/update/${tweetId}`,
-        {
-          description: updatedTweet.description,
-          image: url,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      if (response.data.success) {
-        const updatedTweets = tweets.map((tweet) => {
-          if (tweet._id === tweetId) {
-            return {
-              ...tweet,
-              description: updatedTweet.description,
-              image: url,
-            };
-          }
-          return tweet;
-        });
-
-        setTweets(updatedTweets);
-        setIsUpdating(false);
-        setUpdatedTweet({ description: "", image: "" });
-        setAnchorEl(null);
-        setIsModalOpen(false);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };*/
+ 
 
 
 
-
-  const handleEditTweetSubmit = async (e) => {
-    e.preventDefault();
+  const handleEditTweetSubmit = async (url) => {
+    // e.preventDefault();
     try {
       const tweetData = {
         description: updatedTweet.description,
@@ -180,10 +142,10 @@ const TweetCard = () => {
       };
   
       // Only add the image field to the tweetData object if an image was uploaded
-      if (imagee) {
-        await uploadImage();
-        tweetData.image = url;
-      }
+      // if (imagee) {
+      //   await uploadImage();
+      //   tweetData.image = url;
+      // }
   
       const response = await axios.put(
         `http://localhost:5000/tweets/update/${tweetId}`,
@@ -281,12 +243,14 @@ const TweetCard = () => {
           </CardContent>
           <CardActions disableSpacing>
             <IconButton aria-label="add to favorites">
-              <FavoriteIcon />
+              <LikeButton tweet={tweet} />
             </IconButton>
             <IconButton aria-label="share">
-              <ShareIcon />
+              <ChatBubbleOutlineRoundedIcon  />
             </IconButton>
           </CardActions>
+         
+
         </Card>
 
         <Menu
@@ -338,9 +302,8 @@ const TweetCard = () => {
           >
             <form
               onSubmit={(e) => {
-                handleEditTweetSubmit(e);
+                uploadImage(e);
               }}
-              onClick={uploadImage}
             >
               <TextField
                 label="Description"

@@ -16,13 +16,14 @@ import ListItemText from "@mui/material/ListItemText";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import HomeIcon from "@mui/icons-material/Home";
 import Button from "@mui/material/Button";
-
+import { userContext } from "../../App";
 
 import "./Style.css";
 import { borderRadius } from "@mui/system";
 
 const Navbar = () => {
-    
+  const { setUser,handleLogin } = useContext(UserContext);
+ 
   const drawerWidth = 210;
 
   return (
@@ -67,7 +68,17 @@ const Navbar = () => {
             </ListItemText>
           </ListItem>
         </List>
+        <List>
+          <ListItem>
+            <Link to="/login"
 
+              
+              onClick={()=>handleLogin("")}
+            >
+              Log Out
+            </Link>
+          </ListItem>
+        </List>
         <List>
           <ListItem>
             <Button

@@ -196,7 +196,7 @@ const TweetCard = () => {
   const renderTweets = () => {
     return tweets.map((tweet) => (
       <div className="card-pos" key={tweet._id}>
-        <Card sx={{ maxWidth: 800 }}>
+        <Card sx={{ maxWidth: 700 }}>
           <CardHeader
             avatar={
               <Avatar
@@ -223,8 +223,9 @@ const TweetCard = () => {
           {tweet.image && (
             <CardMedia
               component="img"
-              width="auto"
-              height="auto"
+              // width="5%"
+              sizes="mini"
+              // height="1%"
               image={tweet.image}
               src={url}
               alt="Tweet image"

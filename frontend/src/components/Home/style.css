@@ -1,0 +1,52 @@
+/* CSS for the homepage */
+.homepage-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  .homepage-header {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .tweet-card {
+    width: 100%;
+    max-width: 800px;
+    margin-bottom: 20px;
+  }
+  
+  .tweet-card img {
+    max-width: 100%;
+  }
+  
+  .tweet-card-actions {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .tweet-card-actions button {
+    margin-right: 10px;
+  }
+  
+  .comment-box {
+    margin-top: 20px;
+  }
+  
+  .comment-box input[type="file"] {
+    margin-top: 10px;
+  }
+  
+  /* Media query for small screens */
+  @media only screen and (max-width: 600px) {
+    .homepage-container {
+      padding: 10px;
+    }
+  
+    .tweet-card {
+      max-width: 100%;
+    }
+  }
+  

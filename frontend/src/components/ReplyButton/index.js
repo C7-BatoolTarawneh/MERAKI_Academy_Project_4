@@ -1,11 +1,14 @@
 import React, { useState, useContext } from "react";
-import { Button, Comment } from "semantic-ui-react";
+import {  Comment } from "semantic-ui-react";
+import {  Button } from "@mui/material";
+
 import ChatBubbleOutlineRoundedIcon from "@mui/icons-material/ChatBubbleOutlineRounded";
 import axios from "axios";
 import { UserContext } from "../../App";
 import CommentBox from "../CommentBox";
 import { red } from "@mui/material/colors";
 import CardMedia from "@mui/material/CardMedia";
+import "./style.css";
 
 const ReplyButton = ({ tweetId }) => {
   const [isCommenting, setIsCommenting] = useState(false);
@@ -74,7 +77,14 @@ const ReplyButton = ({ tweetId }) => {
                 }
               />
             )}
-            <Button onClick={handleCancelCommentClick}>Cancel</Button>
+            <Button
+              style={{ marginTop: "10px" }}
+              variant="contained"
+              color="error"
+              onClick={handleCancelCommentClick}
+            >
+              Cancel
+            </Button>
           </div>
         </>
       )}

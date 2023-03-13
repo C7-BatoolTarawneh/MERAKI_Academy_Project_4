@@ -7,7 +7,6 @@ import { UserContext } from "../../App";
 
 
 
-
   const LikeButton = ({ tweet }) => {
     const [isLiked, setIsLiked] = useState(false);
     const [likeCount, setLikeCount] = useState(tweet.likes.length);
@@ -62,7 +61,7 @@ import { UserContext } from "../../App";
   
     return (
       <>
-        <IconButton
+        <IconButton disableRipple
           aria-label="add to favorites"
           onClick={handleLikeClick}
           color={isLiked ? 'secondary' : 'default'}

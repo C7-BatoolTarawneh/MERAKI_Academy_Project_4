@@ -7,6 +7,7 @@ import {UserContext} from '../../App'
 import LeftNavbar from "../LeftNavbar"
 import axios from 'axios'
 import LikeButton from '../LikeButton'
+import CreateNewTweet from '../CreateNewTweet'
 
 const Home = () => {
  
@@ -14,7 +15,8 @@ const Home = () => {
   return (
     
   
-    <div>Home
+    <div>
+      <CreateNewTweet/>
       <LeftNavbar/>
       <TweetCard/>
       

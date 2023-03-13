@@ -1,0 +1,10 @@
+.main-card{
+    margin-left: 20em;
+    /* margin-top: 3em; */
+    border-style: inset ;
+    padding: 2em;
+}
+
+.tweet-button{
+    margin-left: 30em;
+}

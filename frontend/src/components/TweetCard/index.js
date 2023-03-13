@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import ChatBubbleOutlineRoundedIcon from '@mui/icons-material/ChatBubbleOutlineRounded';
+import ChatBubbleOutlineRoundedIcon from "@mui/icons-material/ChatBubbleOutlineRounded";
 import { Link, useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import Card from "@mui/material/Card";
@@ -16,16 +16,24 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import { Modal, Box, TextField, Button,FormControl, InputLabel, Input } from "@mui/material";
+import {
+  Modal,
+  Box,
+  TextField,
+  Button,
+  FormControl,
+  InputLabel,
+  Input,
+} from "@mui/material";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { UserContext } from "../../App";
 import LikeButton from "../LikeButton";
-import ReplyButton from "../ReplyButton";
 
 import "./style.css";
+import ReplyButton from "../ReplyButton";
 
 const TweetCard = () => {
   const [tweets, setTweets] = useState([]);
@@ -42,20 +50,19 @@ const TweetCard = () => {
   //anchorEl is used to control whether the Menu component is displayed or hidden.
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedTweet, setSelectedTweet] = useState(null);
+  const [isReplying, setIsReplying] = useState(false);
 
   //initialize the cloudenary component
   const [imagee, setImagee] = useState("");
   const [url, setUrl] = useState("");
 
-
-  
   const uploadImage = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     const data = new FormData();
     data.append("file", imagee);
     data.append("upload_preset", "a1dhlskc");
     data.append("cloud_name", "dnpshl3op");
-  
+
     try {
       const resp = await fetch(
         "https://api.cloudinary.com/v1_1/dnpshl3op/image/upload",
@@ -65,15 +72,13 @@ const TweetCard = () => {
         }
       );
       const json = await resp.json();
-      setUrl(json.url); // update the url state here
-      handleEditTweetSubmit(json.url)
+      // setUrl(json.url); // update the url state here
+      handleEditTweetSubmit(json.url);
       console.log("json: ", json);
     } catch (err) {
       console.log(err);
     }
   };
-  
-  
 
   //to monitore the modal state is shown or hidden
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -130,10 +135,6 @@ const TweetCard = () => {
     }
   };
 
- 
-
-
-
   const handleEditTweetSubmit = async (url) => {
     // e.preventDefault();
     try {
@@ -141,10 +142,9 @@ const TweetCard = () => {
         description: updatedTweet.description,
         image: url,
       };
-  
-      
-      
-  
+
+     
+
       const response = await axios.put(
         `http://localhost:5000/tweets/update/${tweetId}`,
         tweetData,
@@ -165,7 +165,7 @@ const TweetCard = () => {
           }
           return tweet;
         });
-  
+
         setTweets(updatedTweets);
         setIsUpdating(false);
         setUpdatedTweet({ description: "", image: "" });
@@ -176,7 +176,6 @@ const TweetCard = () => {
       console.log(error);
     }
   };
-  
 
   const handleEditTweetClick = (tweet) => {
     setIsUpdating(true);
@@ -186,6 +185,10 @@ const TweetCard = () => {
     console.log(tweet._id);
   };
 
+  const handleReplyButtonClick = () => {
+    setIsReplying(true);
+  };
+
   useEffect(() => {
     getAllTweets();
   }, []);
@@ -193,7 +196,7 @@ const TweetCard = () => {
   const renderTweets = () => {
     return tweets.map((tweet) => (
       <div className="card-pos" key={tweet._id}>
-        <Card sx={{ maxWidth: 600 }}>
+        <Card sx={{ maxWidth: 800 }}>
           <CardHeader
             avatar={
               <Avatar
@@ -236,14 +239,18 @@ const TweetCard = () => {
             <IconButton aria-label="add to favorites">
               <LikeButton tweet={tweet} />
             </IconButton>
-            <IconButton aria-label="share">
-              <ReplyButton tweet={tweet}  />
-            </IconButton>
-          </CardActions>
-         
+            
+            <IconButton aria-label="reply">
+            
+            <ReplyButton  tweetId = {tweet._id} handleReplyButtonClick={handleReplyButtonClick} />       
+                 </IconButton>
+          </CardActions> 
+          {isReplying && (
+           
+  <ReplyButton tweetId={tweet._id} setIsReplying={setIsReplying} />
+)}
 
-        </Card>
-
+          </Card>
         <Menu
           id="simple-menu"
           anchorEl={anchorEl}
@@ -314,7 +321,6 @@ const TweetCard = () => {
                 id="tweet-image-upload"
                 type="file"
                 onChange={(event) => setImagee(event.target.files[0])}
-
               />
 
               <Button variant="contained" type="submit">

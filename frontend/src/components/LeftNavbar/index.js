@@ -17,7 +17,7 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import HomeIcon from "@mui/icons-material/Home";
 import Button from "@mui/material/Button";
 import { userContext } from "../../App";
-
+import LogoutIcon from '@mui/icons-material/Logout';
 import "./Style.css";
 import { borderRadius } from "@mui/system";
 
@@ -69,7 +69,14 @@ const Navbar = () => {
           </ListItem>
         </List>
         <List>
+
           <ListItem>
+          <LogoutIcon className="home-icon-left-nav"
+              color="black"
+              sx={{ fontSize: 40 }}
+              />
+          <ListItemText>
+
             <Link to="/login"
 
               
@@ -77,6 +84,7 @@ const Navbar = () => {
             >
               Log Out
             </Link>
+            </ListItemText>
           </ListItem>
         </List>
         <List>

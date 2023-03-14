@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import {  Comment } from "semantic-ui-react";
-import {  Button } from "@mui/material";
+import {  Button, IconButton } from "@mui/material";
 
 import ChatBubbleOutlineRoundedIcon from "@mui/icons-material/ChatBubbleOutlineRounded";
 import axios from "axios";
@@ -40,7 +40,9 @@ const ReplyButton = ({ tweetId }) => {
   return (
     <div>
       {!isCommenting && (
-        <ChatBubbleOutlineRoundedIcon onClick={handleCreateCommentClick} />
+        <IconButton disableRipple>
+        <ChatBubbleOutlineRoundedIcon  onClick={handleCreateCommentClick} />
+        </IconButton>
       )}
       {isCommenting && (
         <>
@@ -49,13 +51,14 @@ const ReplyButton = ({ tweetId }) => {
               <Comment key={reply._id} style={{ borderTop: "1px solid #ddd" }}>
                 <Comment.Content>
                   <Comment.Author as="a">
-                    <h5 style={{ display: "inline-block", marginRight: "3px" }}>
-                      {reply.replyCreator.userName}
-                    </h5>
+                    <h6 style={{ display: "inline-block", marginRight: "3px" }}>
+                      {"@"+reply.replyCreator.userName}
+                    </h6>
                   </Comment.Author>
-                  <Comment.Text>{reply.caption}</Comment.Text>
+                  <Comment.Text ><p>{reply.caption}</p></Comment.Text>
                   {reply.replyImage && (
                     <CardMedia
+                    sx={{ maxWidth: 100, mx: 'auto' ,mt:2 }}
                       component="img"
                       width="0.05%"
                       height="0.05%"
@@ -78,6 +81,7 @@ const ReplyButton = ({ tweetId }) => {
               />
             )}
             <Button
+            
               style={{ marginTop: "10px" }}
               variant="contained"
               color="error"

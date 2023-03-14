@@ -61,12 +61,13 @@ import { UserContext } from "../../App";
   
     return (
       <>
-        <IconButton disableRipple
+        <IconButton 
+        disableRipple
           aria-label="add to favorites"
           onClick={handleLikeClick}
           color={isLiked ? 'secondary' : 'default'}
         >
-          <FavoriteIcon />
+          <FavoriteIcon  />
         </IconButton>
         <span>{likeCount}</span>
       </>

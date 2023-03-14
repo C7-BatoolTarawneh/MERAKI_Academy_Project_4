@@ -7,11 +7,12 @@ import Home from "./components/Home";
 import LeftNavbar from "./components/LeftNavbar";
 import TweetCard from "./components/TweetCard";
 import LikeButton from "./components/LikeButton";
-
+import Profile from "./components/Profile"
 export const UserContext = createContext()
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [token , setToken] = useState("")
+  const [token , setToken] = useState(localStorage.getItem("token")||"" )
+
+  const [isLoggedIn, setIsLoggedIn] = useState(token?true:false)
   const navigate = useNavigate()
 
   const handleLogin = (newToken) =>{
@@ -20,6 +21,7 @@ function App() {
   localStorage.setItem("token", newToken)
   navigate("Home")
   }
+
   const handleLogout = () => {
     setToken("");
     setIsLoggedIn(false)
@@ -30,11 +32,11 @@ function App() {
   };
 
   useEffect(() =>{
-    setToken(localStorage.getItem("token"))
-    if (token){
-      handleLogin(token)
-    }
-    else if (!isLoggedIn)
+    // setToken(localStorage.getItem("token"))
+    // if (token){
+    //   handleLogin(token)
+    // }
+     if (!isLoggedIn)
     { 
       navigate("/login")
     }
@@ -48,6 +50,8 @@ function App() {
      <Route path="/register" element={<Register/>} />
      <Route path="/login" element={<Login />} />
      <Route path="/Home" element={<Home/>}  />
+     <Route path="/" element={<Home/>} />
+     <Route path="/profile" element={<Profile/>} />
         </Routes>
        
     </div>

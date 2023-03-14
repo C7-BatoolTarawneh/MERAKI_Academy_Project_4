@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../../App";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
@@ -20,10 +20,11 @@ import { userContext } from "../../App";
 import LogoutIcon from '@mui/icons-material/Logout';
 import "./Style.css";
 import { borderRadius } from "@mui/system";
-
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 const Navbar = () => {
   const { setUser,handleLogin } = useContext(UserContext);
- 
+  const navigate = useNavigate();
+
   const drawerWidth = 210;
 
   return (
@@ -87,6 +88,29 @@ const Navbar = () => {
             </ListItemText>
           </ListItem>
         </List>
+        {/*//////////  */}
+        <List>
+
+<ListItem>
+<AccountCircleIcon className="home-icon-left-nav"
+    color="black"
+    sx={{ fontSize: 40 }}
+    />
+<ListItemText>
+
+  <Link to="/profile"
+
+    
+
+  >
+    Profile
+  </Link>
+  </ListItemText>
+</ListItem>
+</List>
+
+
+        {/* ////////// */}
         <List>
           <ListItem>
             <Button

@@ -1,8 +1,11 @@
-.card-pos
-{
-    margin-left: 20em;
-    margin-bottom: 20px;
-    display: block;
+.card-pos {
+  margin-left: 25em;
+  margin-bottom: 20px;
+  display: block;
   height: auto;
-   
+}
+@media only screen and (max-width: 600px) {
+  .MuiCardMedia-img {
+    padding: 10px;
+  }
 }

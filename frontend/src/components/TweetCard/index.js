@@ -143,8 +143,6 @@ const TweetCard = () => {
         image: url,
       };
 
-     
-
       const response = await axios.put(
         `http://localhost:5000/tweets/update/${tweetId}`,
         tweetData,
@@ -196,7 +194,7 @@ const TweetCard = () => {
   const renderTweets = () => {
     return tweets.map((tweet) => (
       <div className="card-pos" key={tweet._id}>
-        <Card sx={{ maxWidth: 700 }}>
+        <Card sx={{ maxWidth: 800, highet: 100 ,bgcolor:"#f5f5f5" }}>
           <CardHeader
             avatar={
               <Avatar
@@ -222,9 +220,11 @@ const TweetCard = () => {
           />
           {tweet.image && (
             <CardMedia
+              sx={{ maxWidth: 300, mx: 'auto' }}
               component="img"
               // width="5%"
               sizes="mini"
+              padding="30"
               // height="1%"
               image={tweet.image}
               src={url}
@@ -236,22 +236,25 @@ const TweetCard = () => {
               {tweet.description}
             </Typography>
           </CardContent>
-          <CardActions disableSpacing>
-            <IconButton aria-label="add to favorites">
+          <CardActions
+            disableSpacing
+            sx={{ bgcolor: "#e8eaf6", border: "outset" }}
+          >
+            <IconButton aria-label="add to favorites" disableRipple sx={{disableTouchRipple:false}} >
               <LikeButton tweet={tweet} />
             </IconButton>
-            
-            <IconButton aria-label="reply">
-            
-            <ReplyButton  tweetId = {tweet._id} handleReplyButtonClick={handleReplyButtonClick} />       
-                 </IconButton>
-          </CardActions> 
-          {isReplying && (
-           
-  <ReplyButton tweetId={tweet._id} setIsReplying={setIsReplying} />
-)}
 
-          </Card>
+            <IconButton aria-label="reply" disableRipple>
+              <ReplyButton
+                tweetId={tweet._id}
+                handleReplyButtonClick={handleReplyButtonClick}
+              />
+            </IconButton>
+          </CardActions>
+          {isReplying && (
+            <ReplyButton tweetId={tweet._id} setIsReplying={setIsReplying} />
+          )}
+        </Card>
         <Menu
           id="simple-menu"
           anchorEl={anchorEl}
@@ -333,7 +336,6 @@ const TweetCard = () => {
       </div>
     ));
   };
-
   return <div>{renderTweets()}</div>;
 };
 

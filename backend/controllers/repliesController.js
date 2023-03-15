@@ -7,6 +7,7 @@ const createNewReply = async (req, res) => {
   try {
     const tweetId = req.params.id;
     const userId = req.token.userId;
+    
     const { caption, replyImage } = req.body;
     //check if reply is empty or includes many of whitespace
 
@@ -32,6 +33,7 @@ const createNewReply = async (req, res) => {
       replyCreator: userId,
       caption,
       replyImage,
+      replyName:userId.userName
     });
     await newReply.save();
     // add the reply to the tweet
@@ -55,59 +57,8 @@ const createNewReply = async (req, res) => {
   }
 };
 
-// const replyOfReply = async (req, res) => {
-//   try {
-//     const replyId = req.params.id;
-//     const userId = req.token.userId;
-//     const { caption, replyImage } = req.body;
 
-//     // Find the existing reply
-//     const superReply = await replyModel.findById(replyId);
-
-//     if (!superReply) {
-//       return res
-//         .status(404)
-//         .json({ success: false, message: `The reply with id ${replyId} is not found` });
-//     }
-
-//     // Create a new reply
-//     const newReply = new replyModel({
-//       replyCreator: userId,
-//       caption,
-//       replyImage,
-//     });
-
-//     // Update the existing reply by adding the new reply to its replies array
-//     const updatedReply = await replyModel.findOneAndUpdate(
-//       { _id: replyId },
-//       { $push: { reply: newReply._id } },
-//       { new: true }
-//     ).populate({
-//       path: 'reply',
-//       select: 'caption replyCreator',
-//       populate: {
-//         path: 'replyCreator',
-//         select: 'username',
-//       },
-//     });
-
-// Return the updated reply with the new reply added to its replies array
-//     const replies = updatedReply.reply.map((r) => ({
-//       _id: r._id,
-//       caption: r.caption,
-//       replyCreator: r.replyCreator.username,
-//     }));
-
-//     res.status(200).json({
-//       success: true,
-//       message: "Reply created successfully",
-//       reply: replies,
-//     });
-//   } catch (error) {
-//     res.status(500).json({ success: false, message: "Server error", error: error.message });
-//   }
-// };
-
+/*
 const getRepliesByTweetId = async (req, res) => {
   try {
     const tweetId = req.params.id;
@@ -139,6 +90,45 @@ const getRepliesByTweetId = async (req, res) => {
     });
   }
 };
+*/
+const getRepliesByTweetId = async (req, res) => {
+  try {
+    const tweetId = req.params.id;
+    if (!tweetId) {
+      return res.status(400).json({
+        success: false,
+        message: `Invalid tweet id: ${tweetId}`,
+      });
+    }
+    const tweet = await tweetsModel.findById(tweetId).populate({
+      path: "reply",
+      populate: {
+        path: "replyCreator",
+        select: "userName profilePicture",
+      },
+    });
+
+    if (!tweet) {
+      return res.status(404).json({
+        success: false,
+        message: `The tweet with the id => ${tweetId} not found`,
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: `All replies for the tweet with id ${tweetId}`,
+      replies: tweet.reply,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: `Server Error`,
+      error: error.message,
+    });
+  }
+};
+
 
 const likeReply = async (req, res) => {
   try {

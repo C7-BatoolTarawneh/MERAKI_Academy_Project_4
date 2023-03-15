@@ -11,6 +11,7 @@ const {
   deleteUser,
   followUser,
   unfollowUser,
+  getAllUsers
 } = require("../controllers/usersController");
 
 const authentication = require("../middleware/authentication");
@@ -21,7 +22,8 @@ const usersRouter = express.Router();
 usersRouter.post("/register", register);
 usersRouter.post("/login", login);
 usersRouter.get("/:id", getUserById);
-usersRouter.get("/", getUserByUserName); //http://localhost:5000/users?userName=Banan
+usersRouter.get("/search_1/userName", getUserByUserName); //http://localhost:5000/users?userName=Banan
+usersRouter.get("/",getAllUsers)
 usersRouter.put(
   "/email",
   authentication,

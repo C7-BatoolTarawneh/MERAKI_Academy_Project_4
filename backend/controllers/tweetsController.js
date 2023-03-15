@@ -2,40 +2,7 @@ const tweetsModel = require("../models/tweets");
 const userModel = require("../models/users");
 const replyModel = require("../models/replies");
 
-/*const createNewTweet = (req, res) => {
-  const { image, description } = req.body;
-  const writer = req.token.userId;
-  console.log("REQUEST TOCK: ",req.token)
-  const newTweet = new tweetsModel({
-    image,
-    description,
-    writer,
-  });
 
-  newTweet
-    .save()
-    
-    .then((tweet) => {
-      
-      res.status(201).json({
-        success: true,
-        message: `Tweet created`,
-        tweet: tweet,
-
-       
-        
-      });
-      console.log("RESSSSSSS::  ",res)
-    })
-
-    .catch((err) => {
-      res.status(500).json({
-        success: false,
-        message: `Server Error`,
-        err: err.message,
-      });
-    });
-};*/
 
 
 const createNewTweet = (req, res) => {
@@ -97,6 +64,16 @@ const getTweetsByWriter = (req, res) => {
 
   tweetsModel
     .find({ writer: userId })
+    .populate([
+      {
+        path: "reply",
+        select: "-_id -__v",
+      },
+      {
+        path: "writer",
+        select: "userName profilePicture", // include the profile picture field in the response
+      },
+    ])
     .then((tweets) => {
       if (!tweets.length) {
         return res.status(404).json({
@@ -119,37 +96,6 @@ const getTweetsByWriter = (req, res) => {
     });
 };
 
-/*
-const getAllTweets = (req, res) => {
-  const userId = req.token.userId;
-  
-  tweetsModel
-    .find()
-    .populate("reply", "-_id -__v")
-    .then((tweets) => {
-      if (tweets.length) {
-        res.status(200).json({
-          success: true,
-          message: "All tweets ",
-          userId: userId,
-          tweets: tweets,
-          
-        });
-        console.log("RESSS: " ,tweets[0].writer.userName)
-      } else {
-        res.status(200).json({ success: false, message: "no tweets so far" });
-      }
-    })
-    // console.log(res)
-    .catch((err) => {
-      res.status(500).json({
-        success: false,
-        message: `Server Error`,
-        err: err.message,
-      });
-    });
-};
-*/
 
 const getAllTweets = (req, res) => {
   const userId = req.token.userId;
@@ -283,7 +229,7 @@ const likeTweet = (req, res) => {
       // check if it is liked or not, is user in likes array or not?
       const alreadyLiked = tweet.likes.includes(userId);
       if (alreadyLiked) {
-        console.log("aaa");
+        // console.log("aaa");
         return res.status(404).json({ success: false, message:`the tweet already liked by ${userId}`})
       } 
         tweet.likes.push(userId);

@@ -7,7 +7,8 @@ const {
   deleteTweetById,
   deleteTweetByWriter,
   likeTweet,
-  unlikeTweet
+  unlikeTweet,
+  
 } = require("../controllers/tweetsController");
 
 const authentication = require("../middleware/authentication");
@@ -25,6 +26,7 @@ tweetsRouter.post(
 tweetsRouter.get("/search_1", getTweetsByWriter); //  http://localhost:5000/tweets/search_1?writer=
 
 tweetsRouter.get("/", authentication, getAllTweets);
+
 tweetsRouter.put(
   "/update/:id",
   authentication,

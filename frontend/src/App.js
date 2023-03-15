@@ -11,22 +11,34 @@ import Profile from "./components/Profile"
 export const UserContext = createContext()
 function App() {
   const [token , setToken] = useState(localStorage.getItem("token")||"" )
+const [userId,setUserId] = useState(localStorage.getItem("userId")||"")
+const [userName,setUserName] = useState(localStorage.getItem("userName")||"")
 
   const [isLoggedIn, setIsLoggedIn] = useState(token?true:false)
   const navigate = useNavigate()
 
-  const handleLogin = (newToken) =>{
+  const handleLogin = (newToken,userId,userName) =>{
+    // console.log(userId)
   setToken(newToken)
+  setUserName(userName)
+  setUserId(userId)
   setIsLoggedIn(true)
   localStorage.setItem("token", newToken)
+  localStorage.setItem("username", userName)
+  localStorage.setItem("userId", userId)
+
   navigate("Home")
   }
 
   const handleLogout = () => {
     setToken("");
+    setUserName("")
+    setUserId("")
     setIsLoggedIn(false)
 
     localStorage.removeItem("token")
+    localStorage.removeItem("username")
+    localStorage.removeItem("userId")
     navigate("Login")
    
   };
@@ -43,7 +55,7 @@ function App() {
   },[token])
 
   return (
-    <UserContext.Provider value={{isLoggedIn,token,handleLogin,handleLogout}}>
+    <UserContext.Provider value={{isLoggedIn,token,handleLogin,handleLogout,userId,userName}}>
     <div className="App">
    
       <Routes>

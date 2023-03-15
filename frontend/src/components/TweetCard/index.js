@@ -194,7 +194,7 @@ const TweetCard = () => {
   const renderTweets = () => {
     return tweets.map((tweet) => (
       <div className="card-pos" key={tweet._id}>
-        <Card sx={{ maxWidth: 800, highet: 100 ,bgcolor:"#f5f5f5" }}>
+        <Card className="ccards" sx={{ maxWidth: 800, highet: 100 ,bgcolor:"#f5f5f5" }}>
           <CardHeader
             avatar={
               <Avatar
@@ -216,7 +216,12 @@ const TweetCard = () => {
               )
             }
             title={`${tweet.writer.userName} `}
-            subheader={new Date(tweet.createdAt).toLocaleString()}
+            subheader={
+              <React.Fragment>
+                <div>{"Created at: " + new Date(tweet.createdAt).toLocaleString()}</div>
+                <div>{"Updated at: " + new Date(tweet.updatedAt).toLocaleString()}</div>
+              </React.Fragment>
+            }
           />
           {tweet.image && (
             <CardMedia

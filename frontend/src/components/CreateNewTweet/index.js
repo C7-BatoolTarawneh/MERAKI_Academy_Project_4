@@ -11,7 +11,7 @@ import {
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import "./style.css";
-import { TextField } from "@mui/material";
+import { Avatar, TextField } from "@mui/material";
 import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 import InsertEmoticonIcon from "@mui/icons-material/InsertEmoticon";
 import CardMedia from "@mui/material/CardMedia";
@@ -101,7 +101,9 @@ const CreateNewTweet = () => {
       <Card className="main-card" sx={{ maxWidth: 800, highet: 100 ,borderRadius: '16px' ,border:"outset",borderWidth:7,borderColor:"#e8eaf6",borderSize:12, padding:10 }}>
         <CardBody>
           <Stack mt="6" spacing="3">
+            
             <TextField
+            
               multiline
               rows={4}
               placeholder="Whats happening?!"

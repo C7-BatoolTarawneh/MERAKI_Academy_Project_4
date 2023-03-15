@@ -35,7 +35,12 @@ const handleLoginClick = async (e) => {
       password
     })
     const {token} = response.data
-    handleLogin(token)
+    const userId = response.data.user._id
+    const userName = response.data.user.userName
+
+    // localStorage.setItem("username", userName)
+    // localStorage.setItem("userId", userId)
+    handleLogin(token,userId,userName)
   }
   catch (error){
     setMessage({ text: error.response.data.message, show: true });

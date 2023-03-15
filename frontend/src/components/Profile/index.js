@@ -30,6 +30,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import LikeButton from "../LikeButton";
 import CreateNewTweet from "../CreateNewTweet";
+import TopNavbar from "../TopNavbar"
 
 import UserPersonalCard from  "../UserPersonalCard";
 
@@ -197,7 +198,7 @@ const Profile = () => {
     return tweets.slice()
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map((tweet) => (
       <div className="card-pos" key={tweet._id}>
-        <Card sx={{ maxWidth: 800, highet: 100, bgcolor: "#f5f5f5" }}>
+        <Card sx={{ maxWidth: 1260, highet: 100, bgcolor: "#f5f5f5" }}>
           <CardHeader
             avatar={
               <Avatar
@@ -232,7 +233,7 @@ const Profile = () => {
           />
           {tweet.image && (
             <CardMedia
-              sx={{ maxWidth: 300, mx: "auto" }}
+              sx={{ maxWidth: 400, mx: "auto" }}
               component="img"
               // width="5%"
               sizes="mini"
@@ -354,8 +355,9 @@ const Profile = () => {
   };
   return (
     <div>
+<TopNavbar/>
         <UserPersonalCard className="UserPersonalCard"/>
-      <CreateNewTweet  />
+      <CreateNewTweet className="create-tweet" />
       <LeftNavbar />
 
       {renderMyTweets()}

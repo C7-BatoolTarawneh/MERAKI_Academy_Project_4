@@ -28,7 +28,7 @@ const UserPersonalCard = () => {
       {
         return(
       
-     <div className="profile"  >
+     <div className="profilee"  >
         
         <div className="profileRight">
           <div className="profileRightTop">

@@ -9,13 +9,14 @@ import axios from "axios";
 import LikeButton from "../LikeButton";
 import CreateNewTweet from "../CreateNewTweet";
 import { margin } from "@mui/system";
-
+import TopNavbar from "../TopNavbar"
 const Home = () => {
   return (
     <div >
       <div className="header-div">
-        <h1 className="home-header">Home</h1>
+        {/* <h1 className="home-header">Home</h1> */}
       </div>
+      <TopNavbar/>
       <CreateNewTweet />
       <LeftNavbar />
       <TweetCard />

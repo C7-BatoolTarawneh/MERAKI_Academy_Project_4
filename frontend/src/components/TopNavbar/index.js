@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, createContext, useContext } from "react";
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -15,8 +15,32 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
+import axios from "axios";
+import { UserContext } from "../../App";
 
 const TopNavbar = () => {
+  const { isLoggedIn, token, user, userId, userName } = useContext(UserContext);
+
+  const [searchValue, setSearchValue] = useState("");
+
+ 
+
+  const searchForUser = async () => {
+    // e.preventDefault()
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/users/search_1?userName=${searchValue}`
+      );
+
+      //   const data = await response.json();
+
+      console.log("--> ", response.data);
+      console.log(userName);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const Search = styled("div")(({ theme }) => ({
     position: "relative",
     borderRadius: theme.shape.borderRadius,
@@ -24,12 +48,11 @@ const TopNavbar = () => {
     "&:hover": {
       backgroundColor: alpha(theme.palette.common.white, 0.25),
     },
-    // marginRight: theme.spacing(2),
-    // marginLeft: 200,
-    width: "60%",
+    marginLeft: 40,
+    width: "100%",
     [theme.breakpoints.up("sm")]: {
-      marginLeft: theme.spacing(60),
-      width: "20%",
+      marginLeft: theme.spacing(40),
+      width: "auto",
     },
   }));
 
@@ -47,29 +70,38 @@ const TopNavbar = () => {
     color: "inherit",
     "& .MuiInputBase-input": {
       padding: theme.spacing(1, 1, 1, 0),
-      // vertical padding + font size from searchIcon
+      //   vertical padding + font size from searchIcon
       paddingLeft: `calc(1em + ${theme.spacing(4)})`,
       transition: theme.transitions.create("width"),
       width: "100%",
-      [theme.breakpoints.up("md")]: {
-        width: "20ch",
+      [theme.breakpoints.up("sm")]: {
+        width: "12ch",
+        "&:focus": {
+          width: "20ch",
+        },
       },
     },
   }));
+
 
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="fixed">
         <Toolbar>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ "aria-label": "search" }}
-            />
-          </Search>
+          <form onSubmit={searchForUser}>
+            <Search>
+              <SearchIconWrapper>
+                <SearchIcon />
+              </SearchIconWrapper>
+              <StyledInputBase
+                sx={{ marginLeft: 3 }}
+                value={searchValue}
+                placeholder="Search…"
+                onChange={(e)=>{setSearchValue(e.target.value)}}
+                inputProps={{ "aria-label": "search" }}
+              />
+            </Search>
+          </form>
           <Box sx={{ flexGrow: 1 }} />
         </Toolbar>
       </AppBar>

@@ -98,7 +98,7 @@ const CreateNewTweet = () => {
         uploadImage(e);
       }}
     >
-      <Card className="main-card" sx={{ maxWidth: 800, highet: 100 ,borderRadius: '16px' ,border:"outset",borderWidth:7,borderColor:"#e8eaf6",borderSize:12, padding:10 }}>
+      <Card className="main-card" sx={{ maxWidth: 1100, highet: 100 ,borderRadius: '16px' ,border:"outset",borderWidth:7,borderColor:"#e8eaf6",borderSize:12, padding:10 }}>
         <CardBody>
           <Stack mt="6" spacing="3">
             

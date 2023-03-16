@@ -5,6 +5,8 @@ import { UserContext } from "../../App";
 const UserPersonalCard = () => {
     const { isLoggedIn, token, user, userId, userName } = useContext(UserContext);
  const[users,setUsers]=useState("")
+ const [followers, setFollowers] = useState(0);
+const [following, setFollowing] = useState(0);
 
     const getUserById = async () => {
         try {
@@ -19,8 +21,34 @@ const UserPersonalCard = () => {
         }
       };
 
+      const getFollowers = async () => {
+        try {
+          const response = await axios.get(
+            `http://localhost:5000/users/${userId}`
+          );
+          setFollowers(response.data.user.followers.length);
+        } catch (err) {
+          console.log(err);
+        }
+      };
+    
+      const getFollowing = async () => {
+        try {
+          const response = await axios.get(
+            `http://localhost:5000/users/${userId}`
+          );
+          setFollowing(response.data.user.following.length);
+        } catch (err) {
+          console.log(err);
+        }
+      };
+
+
+
       useEffect(() => {
         getUserById()
+        getFollowers()
+        getFollowing()
       }, [])
 
       const renderCard = ()=>
@@ -46,7 +74,17 @@ const UserPersonalCard = () => {
             </div>
             <div className="profileInfo">
                 <h4 className="profileInfoName">{users.userName}</h4>
-                
+                <div className="profileInfoCounts">
+    <div>
+      <h2>{followers}</h2>
+      <p>Followers</p>
+    </div>
+    <div>
+      <h2>{following}</h2>
+      <p>Following</p>
+    </div>
+    </div>
+
             </div>
           </div>
           <div className="profileRightBottom">

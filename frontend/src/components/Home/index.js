@@ -14,9 +14,9 @@ const Home = () => {
   return (
     <div >
       <div className="header-div">
-        {/* <h1 className="home-header">Home</h1> */}
+        <h1 className="home-header">Home</h1>
       </div>
-      <TopNavbar/>
+      {/* <TopNavbar style={marginTop:}/> */}
       <CreateNewTweet />
       <LeftNavbar />
       <TweetCard />

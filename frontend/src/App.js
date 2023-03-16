@@ -8,6 +8,8 @@ import LeftNavbar from "./components/LeftNavbar";
 import TweetCard from "./components/TweetCard";
 import LikeButton from "./components/LikeButton";
 import Profile from "./components/Profile"
+import YourList from "./components/YourList"
+import Settings from "./components/Settings";
 export const UserContext = createContext()
 function App() {
   const [token , setToken] = useState(localStorage.getItem("token")||"" )
@@ -44,10 +46,7 @@ const [userName,setUserName] = useState(localStorage.getItem("userName")||"")
   };
 
   useEffect(() =>{
-    // setToken(localStorage.getItem("token"))
-    // if (token){
-    //   handleLogin(token)
-    // }
+    
      if (!isLoggedIn)
     { 
       navigate("/login")
@@ -64,6 +63,10 @@ const [userName,setUserName] = useState(localStorage.getItem("userName")||"")
      <Route path="/Home" element={<Home/>}  />
      <Route path="/" element={<Home/>} />
      <Route path="/profile" element={<Profile/>} />
+     <Route path="/profile/:userId" element={<Profile />}/>
+     <Route path="/settings" element={<Settings/>}  />
+
+     <Route path="yourlist" element={<YourList/>}/>
         </Routes>
        
     </div>

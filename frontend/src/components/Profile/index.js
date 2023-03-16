@@ -198,7 +198,7 @@ const Profile = () => {
     return tweets.slice()
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map((tweet) => (
       <div className="card-pos" key={tweet._id}>
-        <Card sx={{ maxWidth: 1260, highet: 100, bgcolor: "#f5f5f5" }}>
+        <Card sx={{ maxWidth: 1100, highet: 100, bgcolor: "#f5f5f5" }}>
           <CardHeader
             avatar={
               <Avatar
@@ -355,9 +355,10 @@ const Profile = () => {
   };
   return (
     <div>
-<TopNavbar/>
+{/* <TopNavbar/> */}
+<h1>Profile</h1>
         <UserPersonalCard className="UserPersonalCard"/>
-      <CreateNewTweet className="create-tweet" />
+      <CreateNewTweet className="create-tweet"  />
       <LeftNavbar />
 
       {renderMyTweets()}

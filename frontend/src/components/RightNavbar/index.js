@@ -28,14 +28,14 @@ const Navbar = () => {
   const { setUser, handleLogin } = useContext(UserContext);
   const navigate = useNavigate();
 
-  const drawerWidth = 260;
+  const drawerWidth = 390;
 
   return (
-    <Box sx={{ display: "flex"}}>
+    <Box sx={{ display: "flex", }}>
       <CssBaseline />
       <AppBar
         position="fixed"
-        sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
+        sx={{ width: `calc(100% - ${drawerWidth}px)`, mr: `${drawerWidth}px` }}
       ></AppBar>
       <Drawer
         sx={{
@@ -47,20 +47,20 @@ const Navbar = () => {
           },
         }}
         variant="permanent"
-        anchor="left"
+        anchor="right"
       >
         <Toolbar />
         <List>
           <ListItem>
-            <TwitterIcon
+            {/* <TwitterIcon
               className="twitter-icon-left-nav"
               color="primary"
               sx={{ fontSize: 80 }}
-            />
+            /> */}
           </ListItem>
         </List>
         <Divider />
-        <List>
+        {/* <List>
           <ListItem>
             <HomeIcon
               className="home-icon-left-nav"
@@ -71,10 +71,10 @@ const Navbar = () => {
               <Link to="/Home"> Home </Link>
             </ListItemText>
           </ListItem>
-        </List>
+        </List> */}
     
         {/*//////////  */}
-        <List>
+        {/* <List>
           <ListItem>
             <AccountCircleIcon
               className="home-icon-left-nav"
@@ -85,10 +85,10 @@ const Navbar = () => {
               <Link to="/profile">Profile</Link>
             </ListItemText>
           </ListItem>
-        </List>
+        </List> */}
        
           {/* //////////////// */}
-          <List>
+          {/* <List>
           <ListItem>
             <PeopleAltIcon
               className="home-icon-left-nav"
@@ -99,9 +99,9 @@ const Navbar = () => {
               <Link to="/yourlist">Follower/Following List</Link>
             </ListItemText>
           </ListItem>
-        </List> 
+        </List>  */}
         {/* ************************** */}
-        <List>
+        {/* <List>
           <ListItem>
             <SettingsIcon
               className="home-icon-left-nav"
@@ -112,10 +112,10 @@ const Navbar = () => {
               <Link to="/settings">Settings</Link>
             </ListItemText>
           </ListItem>
-        </List> 
+        </List>  */}
         
          {/* //////////////// */}
-        <List>
+        {/* <List>
            
           <ListItem>
             <LogoutIcon
@@ -129,7 +129,7 @@ const Navbar = () => {
               </Link>
             </ListItemText>
           </ListItem>
-        </List>
+        </List> */}
         {/* ////////// */}
      
       </Drawer>

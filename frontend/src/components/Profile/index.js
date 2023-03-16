@@ -31,13 +31,15 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import LikeButton from "../LikeButton";
 import CreateNewTweet from "../CreateNewTweet";
 import TopNavbar from "../TopNavbar"
-
+import RightNavbar from "../RightNavbar"
 import UserPersonalCard from  "../UserPersonalCard";
 
 import "./style.css";
 import ReplyButton from "../ReplyButton";
 import axios from "axios";
 const Profile = () => {
+  const {followerId} = useParams()
+
   const { isLoggedIn, token, user, userId, userName } = useContext(UserContext);
   const [tweets, setTweets] = useState([]);
   const [selectedTweet, setSelectedTweet] = useState(null);
@@ -99,7 +101,7 @@ const Profile = () => {
   const getTweetsByWriter = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/tweets/search_1?writer=${userId}`,
+        `http://localhost:5000/tweets/search_1?writer=${!followerId ? userId : followerId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -192,6 +194,7 @@ const Profile = () => {
 
   useEffect(() => {
     getTweetsByWriter();
+    console.log(followerId)
   }, []);
 
   const renderMyTweets = () => {
@@ -355,11 +358,12 @@ const Profile = () => {
   };
   return (
     <div>
-{/* <TopNavbar/> */}
+      
 <h1>Profile</h1>
         <UserPersonalCard className="UserPersonalCard"/>
       <CreateNewTweet className="create-tweet"  />
       <LeftNavbar />
+      <RightNavbar/>
 
       {renderMyTweets()}
     </div>

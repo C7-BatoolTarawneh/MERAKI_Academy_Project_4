@@ -2,6 +2,8 @@ import React, { useState, useEffect, createContext, useContext } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { UserContext } from "../../App";
 import axios from "axios";
+import RightNavbar from "../RightNavbar";
+
 import LeftNavbar from "../LeftNavbar";
 import {
   Avatar,
@@ -80,6 +82,8 @@ const YourList = () => {
   return (
     <div>
       <LeftNavbar />
+      <RightNavbar/>
+
       <Box mx="300">
         <Flex>
           <Box mx="auto">

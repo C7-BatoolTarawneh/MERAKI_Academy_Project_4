@@ -63,7 +63,7 @@ const [userName,setUserName] = useState(localStorage.getItem("userName")||"")
      <Route path="/Home" element={<Home/>}  />
      <Route path="/" element={<Home/>} />
      <Route path="/profile" element={<Profile/>} />
-     <Route path="/profile/:userId" element={<Profile />}/>
+     <Route path="/profile/:followerId" element={<Profile />}/>
      <Route path="/settings" element={<Settings/>}  />
 
      <Route path="yourlist" element={<YourList/>}/>

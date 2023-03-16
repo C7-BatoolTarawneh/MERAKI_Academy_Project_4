@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import LeftNavbar from "../LeftNavbar";
 import axios from "axios";
 import { UserContext } from "../../App";
-
+import RightNavbar from "../RightNavbar";
 import "./style.css";
 
 const Settings = () => {
@@ -82,6 +82,7 @@ const uploadImage = async (e) => {
 
   return (
     <>
+    <RightNavbar/>
       <LeftNavbar />
       <div class="container bootstrap snippets bootdey">
         <h1 class="text-primary">Edit Profile</h1>

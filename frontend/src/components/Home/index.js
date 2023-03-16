@@ -9,7 +9,7 @@ import axios from "axios";
 import LikeButton from "../LikeButton";
 import CreateNewTweet from "../CreateNewTweet";
 import { margin } from "@mui/system";
-import TopNavbar from "../TopNavbar"
+import RightNavbar from "../RightNavbar"
 const Home = () => {
   return (
     <div >
@@ -19,6 +19,7 @@ const Home = () => {
       {/* <TopNavbar style={marginTop:}/> */}
       <CreateNewTweet />
       <LeftNavbar />
+      <RightNavbar/>
       <TweetCard />
     </div>
   );

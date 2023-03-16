@@ -1,4 +1,6 @@
 import React, { useState, useEffect, createContext, useContext } from 'react'
+import { link, useNavigate, useParams } from "react-router-dom";
+
 import "./style.css"
 import axios from "axios"
 import { UserContext } from "../../App";
@@ -7,11 +9,12 @@ const UserPersonalCard = () => {
  const[users,setUsers]=useState("")
  const [followers, setFollowers] = useState(0);
 const [following, setFollowing] = useState(0);
+const {followerId} = useParams()
 
     const getUserById = async () => {
         try {
           const response = await axios.get(
-            `http://localhost:5000/users/${userId}`
+            `http://localhost:5000/users/${!followerId ? userId : followerId}`
           );
           console.log("response: ", response.data.user);
           setUsers(response.data.user);
@@ -24,7 +27,7 @@ const [following, setFollowing] = useState(0);
       const getFollowers = async () => {
         try {
           const response = await axios.get(
-            `http://localhost:5000/users/${userId}`
+            `http://localhost:5000/users/${!followerId ? userId : followerId}`
           );
           setFollowers(response.data.user.followers.length);
         } catch (err) {
@@ -35,7 +38,7 @@ const [following, setFollowing] = useState(0);
       const getFollowing = async () => {
         try {
           const response = await axios.get(
-            `http://localhost:5000/users/${userId}`
+            `http://localhost:5000/users/${!followerId ? userId : followerId}`
           );
           setFollowing(response.data.user.following.length);
         } catch (err) {

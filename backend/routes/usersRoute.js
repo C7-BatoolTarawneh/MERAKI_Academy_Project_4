@@ -21,8 +21,9 @@ const usersRouter = express.Router();
 
 usersRouter.post("/register", register);
 usersRouter.post("/login", login);
+usersRouter.get("/search_1", getUserByUserName); //http://localhost:5000/users?userName=Banan
+
 usersRouter.get("/:id", getUserById);
-usersRouter.get("/search_1/userName", getUserByUserName); //http://localhost:5000/users?userName=Banan
 usersRouter.get("/",getAllUsers)
 usersRouter.put(
   "/email",

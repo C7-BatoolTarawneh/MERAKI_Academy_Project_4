@@ -6,7 +6,8 @@ const bcrypt = require("bcrypt");
 
 //register
 const register = async (req, res) => {
-  const { userName,profilePicture,coverPicture, age, email, password, role } = req.body;
+  const { userName, profilePicture, coverPicture, age, email, password, role } =
+    req.body;
 
   try {
     // Check if role with given ID exists
@@ -36,7 +37,6 @@ const register = async (req, res) => {
       followings: [],
     });
 
-    
     await user.save();
 
     res.status(201).json({
@@ -51,7 +51,7 @@ const register = async (req, res) => {
         message: `The email already exists`,
       });
     }
-    
+
     res.status(500).json({
       success: false,
       message: `Server Error`,
@@ -109,7 +109,11 @@ const login = (req, res) => {
 const getUserById = async (req, res) => {
   try {
     const userId = req.params.id;
-    const user = await userModel.findById(userId).select('-password');;
+    const user = await userModel
+      .findById(userId)
+      .select("-password")
+      .populate("followers", "_id userName profilePicture")
+      .populate("followings", "_id userName profilePicture");
     if (!user) {
       return res.status(404).json({
         success: false,
@@ -119,14 +123,16 @@ const getUserById = async (req, res) => {
     res.status(200).json({
       success: true,
       message: `User with ${userId} found`,
-      user:{
+      user: {
         _id: user._id,
         userName: user.userName,
         age: user.age,
         email: user.email,
         profilePicture: user.profilePicture,
-        coverPicture: user.coverPicture 
-      }
+        coverPicture: user.coverPicture,
+        followers: user.followers,
+        following: user.followings,
+      },
     });
   } catch (err) {
     res.status(500).json({
@@ -287,27 +293,26 @@ const updateUserCoverPicture = async (req, res) => {
   }
 };
 
-
 const getAllUsers = async (req, res) => {
-
   try {
-    const users = await userModel.find({}).populate('role', '-_id -__v').select('-password');
+    const users = await userModel
+      .find({})
+      .populate("role", "-_id -__v")
+      .select("-password");
 
     res.status(200).json({
       success: true,
-      message: 'All users retrieved successfully',
+      message: "All users retrieved successfully",
       users: users,
     });
   } catch (err) {
     res.status(500).json({
       success: false,
-      message: 'Server Error',
+      message: "Server Error",
       err: err.message,
     });
   }
 };
-
-
 
 const deleteUser = async (req, res) => {
   // Get the ID of the user to delete from the JWT token
@@ -466,5 +471,5 @@ module.exports = {
   deleteUser,
   followUser,
   unfollowUser,
-  getAllUsers
+  getAllUsers,
 };

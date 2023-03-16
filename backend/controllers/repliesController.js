@@ -58,39 +58,7 @@ const createNewReply = async (req, res) => {
 };
 
 
-/*
-const getRepliesByTweetId = async (req, res) => {
-  try {
-    const tweetId = req.params.id;
-    if (!tweetId) {
-      return res.status(400).json({
-        success: false,
-        message: `Invalid tweet id: ${tweetId}`,
-      });
-    }
-    const tweet = await tweetsModel.findById(tweetId).populate("reply");
-    console.log("tweet:", tweet);
 
-    if (!tweet) {
-      return res.status(404).json({
-        success: false,
-        message: `The tweet with the id => ${tweetId} not found`,
-      });
-    }
-    res.status(200).json({
-      success: true,
-      message: `All replies for the tweet with id ${tweetId}`,
-      replies: tweet.reply,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: `Server Error`,
-      error: error.message,
-    });
-  }
-};
-*/
 const getRepliesByTweetId = async (req, res) => {
   try {
     const tweetId = req.params.id;

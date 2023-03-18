@@ -1,121 +1,72 @@
-import React, { useContext } from "react";
+import React, { useState,useEffect,useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../../App";
-import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
-import CssBaseline from "@mui/material/CssBaseline";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
-import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
-import SettingsIcon from "@mui/icons-material/Settings";
-
-import ListItemText from "@mui/material/ListItemText";
-import TwitterIcon from "@mui/icons-material/Twitter";
-import HomeIcon from "@mui/icons-material/Home";
-
-import LogoutIcon from "@mui/icons-material/Logout";
+import Typography from '@mui/joy/Typography';
+import axios from "axios";
 import "./Style.css";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-const Navbar = () => {
+
+const RightNavbar = () => {
   const { handleLogin } = useContext(UserContext);
   const navigate = useNavigate();
+  const [userName, setUserName] = useState('');
+  const [user, setUser] = useState(null);
+  const [error, setError] = useState('');
+  
 
-  // const drawerWidth = 260;
+ 
+  const handleSearch = async (e) => {
+    e.preventDefault();
+  
+    try {
+      const response = await axios.get(`http://localhost:5000/users/search_1?userName=${userName}`);
+      setUser(response.data.user);
+      setError('');
+    } catch (err) {
+      setUser(null);
+      setError(err.response.data.message);
+    }
+  };
+
+  
+ 
 
   return (
     <div className="right">
-   
+    <form onSubmit={handleSearch}>
+      <div className="search-container">
+        <input className="search-input" type="text" placeholder="Search..." value={userName} onChange={(e) => setUserName(e.target.value)} />
+        <button className="search-button" type="submit">Search</button>
+      </div>
+    </form>
 
-        <List>
-          <ListItem>
-            <TwitterIcon
-              className="twitter-icon-left-nav"
-              color="primary"
-              sx={{ fontSize: 80 }}
-            />
-          </ListItem>
-        </List>
-        <Divider />
-        <List>
-          <ListItem>
-            <HomeIcon
-              className="home-icon-left-nav"
-              color="black"
-              sx={{ fontSize: 60 }}
-            />
-            <ListItemText>
-              <Link to="/Home"> Home </Link>
-            </ListItemText>
-          </ListItem>
-        </List>
+    {error && <p>{error}</p>}
 
-        {/*//////////  */}
-        <List>
-          <ListItem>
-            <AccountCircleIcon
-              className="home-icon-left-nav"
-              color="black"
-              sx={{ fontSize: 60 }}
-            />
-            <ListItemText>
-              <Link to="/profile">Profile</Link>
-            </ListItemText>
-          </ListItem>
-        </List>
-
-        {/* //////////////// */}
-        <List>
-          <ListItem>
-            <PeopleAltIcon
-              className="home-icon-left-nav"
-              color="black"
-              sx={{ fontSize: 60 }}
-            />
-            <ListItemText>
-              <Link to="/yourlist">Follower/Following List</Link>
-            </ListItemText>
-          </ListItem>
-        </List>
-        {/* ************************** */}
-        <List>
-          <ListItem>
-            <SettingsIcon
-              className="home-icon-left-nav"
-              color="black"
-              sx={{ fontSize: 60 }}
-            />
-            <ListItemText>
-              <Link to="/settings">Settings</Link>
-            </ListItemText>
-          </ListItem>
-        </List>
-
-        {/* //////////////// */}
-        <List>
-          <ListItem>
-            <LogoutIcon
-              className="home-icon-left-nav"
-              color="black"
-              sx={{ fontSize: 60 }}
-            />
-            <ListItemText>
-              <Link to="/login" onClick={() => handleLogin("")}>
-                Log Out
-              </Link>
-            </ListItemText>
-          </ListItem>
-        </List>
-        {/* ////////// */}
-    
+    {user && (
+      <div className="user-card">
+        <div className="user-image">
+          <img className="pr-im" src={user.profilePicture} alt="Profile" />
+        </div>
+        <div className="user-info">
+          <Typography variant="h6">{`@${user.userName}`}</Typography>
+          {/* add more fields as needed */}
+        </div>
+      </div>
+    )}
+    <div className="trends">
+      <h1 className="nav">Trends for you</h1>
+      <div className="the-trends">
+      <h2>#Jordan</h2>
+      <h2>#Women_International_Day</h2>
+      <h2>#Down_Town</h2>
+      <h2>#Ramdan</h2>
+      <h2>#رمضان_كريم</h2>
+      <h2>#المسجد_الأقصى</h2>
+      <h2>#Zain</h2>
       
+      </div>
     </div>
+  </div>
   );
 };
 
-export default Navbar;
+export default RightNavbar;

@@ -1,14 +1,15 @@
 .left-container{
   position: relative  ;
    border: inset  ;
+   height: 100%;
    width:100%
 }
-/* .left {
- 
+.left {
+ position: sticky;
   width:100%;
+top:0;
 
-
-} */
+}
 
 p {
   margin-left: 2vh;

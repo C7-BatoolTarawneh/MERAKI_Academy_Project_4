@@ -40,7 +40,7 @@ import axios from "axios";
 const Profile = () => {
   const { followerId } = useParams();
 
-  const { isLoggedIn, token, user, userId, userName } = useContext(UserContext);
+  const { isLoggedIn, token, userId, userName } = useContext(UserContext);
   const [tweets, setTweets] = useState([]);
   const [selectedTweet, setSelectedTweet] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -372,6 +372,7 @@ const Profile = () => {
         <CreateNewTweet />
         <div className="tweets-on-render">{renderMyTweets()}</div>
       </div>
+      <RightNavbar/>
     </div>
   );
 };

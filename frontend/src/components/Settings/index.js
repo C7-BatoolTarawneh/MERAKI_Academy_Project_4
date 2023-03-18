@@ -3,21 +3,25 @@ import LeftNavbar from "../LeftNavbar";
 import axios from "axios";
 import { UserContext } from "../../App";
 import RightNavbar from "../RightNavbar";
-import Button from "@mui/joy/Button"; 
+import Button from "@mui/joy/Button";
 
 import "./style.css";
 
 const Settings = () => {
   const [newEmail, setNewEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const { isLoggedIn, token, user } = useContext(UserContext);
-  const [imagee, setImagee] = useState("");
+  const { isLoggedIn, token } = useContext(UserContext);
+  const [image, setImage] = useState("");
   const [url, setUrl] = useState("");
+  const [user, setUser] = useState({});
+  const [profilePicture, setProfilePicture] = useState("");
+  const [coverPicture, setCoverPicture] = useState("");
+  const [pictureType, setPictureType] = useState("");
 
-  const uploadImage = async (e) => {
+  const uploadImage = async (e, pictureType) => {
     e.preventDefault();
     const data = new FormData();
-    data.append("file", imagee);
+    data.append("file", image);
     data.append("upload_preset", "a1dhlskc");
     data.append("cloud_name", "dnpshl3op");
 
@@ -29,15 +33,32 @@ const Settings = () => {
           body: data,
         }
       );
+
       const json = await resp.json();
-      // setUrl(json.url); // update the url state here
-      // handleEditTweetSubmit(json.url); // where i edit the image
-      console.log("json: ", json);
+      console.log(json.url);
+      setUrl(json.url); // update the url state here
+      handleUpdatePicture(json.url, pictureType);
     } catch (err) {
       console.log(err);
     }
   };
 
+  const handleUpdatePicture = async (url, pictureType) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:5000/users/${pictureType}`,
+        { [pictureType]: url },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      setUser(response.data.user);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const handleEditEmail = async () => {
     try {
       const response = await axios.put(
@@ -55,6 +76,7 @@ const Settings = () => {
     }
   };
 
+  console.log(profilePicture);
   const handleEditPassword = async () => {
     try {
       const response = await axios.put(
@@ -80,6 +102,12 @@ const Settings = () => {
     if (newPassword !== "") {
       handleEditPassword();
     }
+    if (profilePicture !== "") {
+      handleUpdatePicture(url, "profilePicture");
+    }
+    if (coverPicture !== "") {
+      handleUpdatePicture(url, "coverPicture");
+    }
   };
 
   return (
@@ -92,33 +120,46 @@ const Settings = () => {
           <div class="col-md-3">
             <div class="text-center">
               <img
-                src="https://bootdey.com/img/Content/avatar/avatar7.png"
+                src={
+                  user.profilePicture 
+                }
                 class="avatar-img-circle-img-thumbnail"
                 alt="avatar"
               />
               <div className="title">
                 <h2>Update a Profile Picture</h2>
-                <input type="file" class="form-control" />
+                <input
+                  type="file"
+                  class="form-control"
+                  onChange={(e) => setImage(e.target.files[0])}
+                />
               </div>
             </div>
           </div>
-          
+
           {/* FOR COVER */}
           <div class="col-md-3">
             <div class="text-center">
               <img
-                src="https://bootdey.com/img/Content/avatar/avatar7.png"
+                src={
+                  user.coverPicture ||
+                  "https://bootdey.com/img/Content/avatar/avatar7.png"
+                }
                 class="avatar-img-circle-img-thumbnail"
                 alt="avatar"
               />
               <div className="title">
                 <h2>Update a Cover Picture</h2>
-                <input type="file" class="form-control" />
+                <input
+                  type="file"
+                  class="form-control"
+                  onChange={(e) => setImage(e.target.files[0])}
+                />
               </div>
             </div>
           </div>
           {/* <!-- edit form column --> */}
-<br/>
+          <br />
           <div class="col-md-9-personal-info">
             <div className="title">
               <h1>Credentials</h1>
@@ -136,9 +177,10 @@ const Settings = () => {
             </div>
 
             <div class="form-group">
-              
               <div class="col-lg-8">
-              <label class="col-lg-3-control-label">Update your password: </label>
+                <label class="col-lg-3-control-label">
+                  Update your password:{" "}
+                </label>
                 <input
                   className="form-control"
                   type="password"
@@ -151,9 +193,13 @@ const Settings = () => {
             <div class="form-group">
               <div class="col-lg-offset-3-col-lg-8">
                 <Button
-                mtarginTop = "2vh"
+                  mtarginTop="2vh"
                   type="submit"
-                  onClick={handleSaveChanges}
+                  // onClick={handleSaveChanges}
+                  onClick={(e) => {
+                    uploadImage(e, "profilePicture" || "coverPicture");
+                    handleSaveChanges(e);
+                  }}
                 >
                   Save Changes
                 </Button>

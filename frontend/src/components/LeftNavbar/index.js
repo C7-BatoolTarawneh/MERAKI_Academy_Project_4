@@ -26,7 +26,7 @@ const Navbar = () => {
 
   return (
     <div className="left-container">
-    
+    <div className="left">
       <List>
         <ListItem>
           <TwitterIcon
@@ -137,6 +137,7 @@ const Navbar = () => {
         </ListItem>
       </List>
       {/* ////////// */}
+    </div>
     </div>
   );
 };

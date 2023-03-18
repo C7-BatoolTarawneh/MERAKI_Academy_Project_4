@@ -19,7 +19,7 @@ const Home = () => {
         <TweetCard />
       </div>
       <LeftNavbar  />
-      {/* <RightNavbar /> */}
+      <RightNavbar />
     </div>
   );
 };

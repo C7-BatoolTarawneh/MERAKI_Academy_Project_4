@@ -171,6 +171,8 @@ const YourList = () => {
         </Flex>
       </Box>
       </div>
+      <RightNavbar/>
+
     </div>
   );
 };

@@ -91,7 +91,7 @@ const CreateNewTweet = () => {
     >
       <Card
         sx={{
-          maxWidth: "85%",
+          maxWidth: "78%",
           highet: 100,
           borderRadius: "16px",
           border: "outset",

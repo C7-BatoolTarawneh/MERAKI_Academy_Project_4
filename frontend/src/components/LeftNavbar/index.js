@@ -22,7 +22,7 @@ const Navbar = () => {
   const { handleLogin } = useContext(UserContext);
   const navigate = useNavigate();
 
-  // const drawerWidth = 260;
+ 
 
   return (
     <div className="left-container">

@@ -2,7 +2,7 @@
   .tweets-on-render {
     width: 90%;
     gap: 10vh;
-    /* border: solid 4px blueviolet; */
+   
     display: flex;
     flex-direction: column;
     align-items: center;

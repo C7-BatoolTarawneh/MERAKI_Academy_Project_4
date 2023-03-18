@@ -49,7 +49,6 @@ const RightNavbar = () => {
         </div>
         <div className="user-info">
           <Typography variant="h6">{`@${user.userName}`}</Typography>
-          {/* add more fields as needed */}
         </div>
       </div>
     )}

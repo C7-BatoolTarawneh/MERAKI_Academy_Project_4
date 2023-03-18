@@ -8,7 +8,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-// import Link from "@mui/material/Link";
+
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -38,8 +38,7 @@ const handleLoginClick = async (e) => {
     const userId = response.data.user._id
     const userName = response.data.user.userName
 
-    // localStorage.setItem("username", userName)
-    // localStorage.setItem("userId", userId)
+   
     handleLogin(token,userId,userName)
   }
   catch (error){
@@ -101,7 +100,6 @@ const theme = createTheme();
                 autoComplete="email"
                 // autoFocus
                 onChange={(e) => {
-                  // console.log(e.target.value);
                   setEmail(e.target.value);
                 }}
               />

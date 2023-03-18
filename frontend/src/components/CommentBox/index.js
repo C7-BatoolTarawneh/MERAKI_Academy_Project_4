@@ -37,7 +37,6 @@ handleSubmit(json.url)
   };
 
   const handleSubmit = async (url) => {
-    // e.preventDefault();
     try {
 
       const response = await axios.post(

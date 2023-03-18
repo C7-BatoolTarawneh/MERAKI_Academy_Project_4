@@ -2,9 +2,9 @@
 .home-header{
   font-family: 'Russo One',monospace ;
 color: cornflowerblue;
-/* border: 20px inset; */
+
 margin-top:2vh;
-/* margin-right:1vh; */
+
 
 
 }
@@ -12,7 +12,7 @@ margin-top:2vh;
   display: grid; /*grid display*/
   grid-template-columns: 2fr 6fr 2fr;
   grid-template-areas: "a b c";
-  /* position: static; */
+  
   
  
 }

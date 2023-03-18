@@ -193,7 +193,6 @@ const Settings = () => {
                 <Button
                   mtarginTop="2vh"
                   type="submit"
-                  // onClick={handleSaveChanges}
                   onClick={(e) => {
                     uploadImage(e, "profilePicture" );
                     handleSaveChanges(e);

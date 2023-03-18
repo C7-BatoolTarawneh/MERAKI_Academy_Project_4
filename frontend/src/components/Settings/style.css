@@ -1,4 +1,89 @@
-.avatar{
-width:200px;
-height:200px;
-}		
+.setting-container{
+    display: grid; /*grid display*/
+    grid-template-columns: 2fr 6fr 2fr;
+    grid-template-areas: "a b c";
+}
+
+
+
+h1{
+    color: cornflowerblue;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.form-horizontal{
+  
+    margin-top: 6vh;
+    padding: 2rem;
+    width: 100%;
+
+}
+
+.col-md-3{
+    display : flex;
+    flex-direction: row;
+    align-items: center;
+  justify-content: center;
+
+}
+
+.header-content{
+    border-color: blue;
+}
+.avatar-img-circle-img-thumbnail{
+    border-radius: 50%;
+    margin-top: 2vw;
+    width: 20%;
+
+}
+.text-center{
+    display : flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 9vw;
+    
+
+}
+
+.col-md-9-personal-info{
+    display: flex;
+    flex-direction: column;
+
+}
+.title{
+    align-items: center;
+
+}
+.email-form-group{
+    justify-content: flex-end;
+    
+}
+.col-lg-8{
+    text-align: left;
+    justify-content: left;
+    align-items: left;
+   
+    padding: 1rem;
+    margin-bottom: 2rem;
+
+}
+
+.form-control {
+    font-size: 16px;
+    color: #666;
+    border: 2px solid #ccc;
+    padding: 8px 12px;
+    border-radius: 4px;
+    box-shadow: none;
+    outline: none;
+  }
+
+  .form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+  }
+
+  .col-lg-3-control-label{
+    font-size: 20px;
+  }

@@ -1,55 +1,30 @@
-/* CSS for the homepage */
-.homepage-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-  }
-  
+
+.home-header{
+  font-family: 'Russo One',monospace ;
+color: cornflowerblue;
+/* border: 20px inset; */
+margin-top:2vh;
+/* margin-right:1vh; */
+
+
+}
+.home-container {
+  display: grid; /*grid display*/
+  grid-template-columns: 2fr 6fr 2fr;
+  grid-template-areas: "a b c";
+  /* position: static; */
   
  
-  
-  .tweet-card {
-    width: 100%;
-    max-width: 800px;
-    margin-bottom: 20px;
-  }
-  
-  .tweet-card img {
-    max-width: 100%;
-  }
-  
-  .tweet-card-actions {
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  .tweet-card-actions button {
-    margin-right: 10px;
-  }
-  
-  .comment-box {
-    margin-top: 20px;
-  }
-  
-  .comment-box input[type="file"] {
-    margin-top: 10px;
-  }
-  
-  /* Media query for small screens */
-  @media only screen and (max-width: 600px) {
-    .homepage-container {
-      padding: 10px;
+}
 
-    }
-    .header-div {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-        }
-   
-    .tweet-card {
-      max-width: 100%;
-    }
-  }
-  
+.home-center {
+  grid-area: b;
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  gap: 5vh;
+  width: 100%;
+  border: solid inset;
+}
+
+

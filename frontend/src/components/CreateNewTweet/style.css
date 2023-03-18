@@ -1,14 +1,5 @@
-.main-card {
-  margin-left: 25em;
-  margin-bottom: 1px;
-  margin-top: 30px;
-  display: block;
-  height: auto;
-  /* border-width: 7em; */
+.form-horizontal{
+  width: 90%;
+  margin-left:5%;
+  /* align-items: center; */
 }
-@media only screen and (max-width: 600px) {
-  .MuiCardMedia-img {
-    padding: 10px;
-  }
-}
-

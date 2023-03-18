@@ -1,26 +1,19 @@
-import React, { useState, useContext,useRef  } from "react";
+import React, { useState, useContext, useRef } from "react";
 import axios from "axios";
 import { UserContext } from "../../App";
-import {
-  Card,
-  Text,
-  Divider,
-   CardBody,
-  CardFooter,
-} from "@chakra-ui/react";
-import Button from "@mui/material/Button";
+import { Card, Text, Divider, CardBody, CardFooter } from "@chakra-ui/react";
+import Button from '@mui/joy/Button';
 import Stack from "@mui/material/Stack";
 import "./style.css";
 import { Avatar, TextField } from "@mui/material";
-import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
-import InsertEmoticonIcon from "@mui/icons-material/InsertEmoticon";
+import InsertPhotoIcon from "@mui/icons-material/InsertPhotoOutlined";
+import InsertEmoticonIcon from "@mui/icons-material/InsertEmoticonOutlined";
 import CardMedia from "@mui/material/CardMedia";
 
-import  Picker  from "emoji-picker-react";
-import "emoji-picker-react/src/components/emoji/Emoji.css"
+import Picker from "emoji-picker-react";
+import "emoji-picker-react/src/components/emoji/Emoji.css";
 import { padding } from "@mui/system";
-
-
+import { CssVarsProvider, extendTheme } from "@mui/joy/styles";
 
 const CreateNewTweet = () => {
   const [description, setDescription] = useState("");
@@ -77,13 +70,10 @@ const CreateNewTweet = () => {
       setUrl("");
     } catch (error) {}
   };
-    const handleEmojiClick = (emoji) => {
-      const emojiString = emoji.native;
-      setDescription(description => `${description}${emojiString}`);
-    };
-    
-  
-  
+  const handleEmojiClick = (emoji) => {
+    const emojiString = emoji.native;
+    setDescription((description) => `${description}${emojiString}`);
+  };
 
   const handleDeleteEmoji = (index) => {
     const newEmojiList = [...emojiList];
@@ -93,35 +83,44 @@ const CreateNewTweet = () => {
   };
   return (
     <form
+      className="form-horizontal"
       reply
       onSubmit={(e) => {
         uploadImage(e);
       }}
     >
-      <Card className="main-card" sx={{ maxWidth: 1100, highet: 100 ,borderRadius: '16px' ,border:"outset",borderWidth:7,borderColor:"#e8eaf6",borderSize:12, padding:10 }}>
+      <Card
+        sx={{
+          maxWidth: "85%",
+          highet: 100,
+          borderRadius: "16px",
+          border: "outset",
+          borderWidth: 7,
+          borderColor: "#6495ED",
+          borderSize: 12,
+          padding: 10,
+        }}
+      >
         <CardBody>
-          <Stack mt="6" spacing="3">
-            
+          <Stack>
             <TextField
-            
               multiline
               rows={4}
               placeholder="Whats happening?!"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             ></TextField>
-            
-            <Divider variant="inset" marginTop={"10px"} />
-            <CardMedia  />
 
-            <Text color="blue.600" fontSize="2xl"></Text>
+            <Divider variant="inset" marginTop={"10px"} />
+            <CardMedia />
+
+            <Text color="blue.600" fontSize="5"></Text>
           </Stack>
         </CardBody>
         <Divider />
-        <CardFooter >
-        
+        <CardFooter>
           <input
-           ref={fileInputRef}
+            ref={fileInputRef}
             accept="image/*"
             id="tweet-image-upload"
             type="file"
@@ -129,43 +128,51 @@ const CreateNewTweet = () => {
             style={{ display: "none" }}
           />
           <InsertPhotoIcon
-          color="primary"
-          fontSize="large"
-          src={url}
-          onClick={() => fileInputRef.current.click()}
-        ></InsertPhotoIcon>
-        
-     
-        <InsertEmoticonIcon
-  color="primary"
-  fontSize="large"
-  onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-  style={{ position: "relative" }}
-></InsertEmoticonIcon>
+            color="primary"
+            fontSize="large"
+            src={url}
+            onClick={() => fileInputRef.current.click()}
+          ></InsertPhotoIcon>
 
-{showEmojiPicker && (
-  <div style={{ position: "absolute", top: "100%", right: 0 }}>
-    <Picker
-      onEmojiClick={handleEmojiClick}
-      disableAutoFocus={true}
-      native={true}
-      style={{ width: "auto", height: "auto" }}
-    />
-  </div>
-)}
+          <InsertEmoticonIcon
+            color="primary"
+            fontSize="large"
+            onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+            style={{ position: "relative" }}
+          ></InsertEmoticonIcon>
 
- <div style={{ display: "flex", justifyContent: "flex-end", width: "100%" }}>
-          <Button
-             colorScheme='twitter'
-            className="tweet-button"
-            variant="contained"
-   
-            borderRadius={100}
-            type="submit"
-            onClick={handleCreateTweet}
+          {showEmojiPicker && (
+            <div style={{ position: "absolute", top: "100%", right: 0 }}>
+              <Picker
+                onEmojiClick={handleEmojiClick}
+                disableAutoFocus={true}
+                native={true}
+                style={{ width: "auto", height: "auto" }}
+              />
+            </div>
+          )}
+
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              width: "100%",
+            }}
           >
-            Tweet
-          </Button>
+            <Button
+              size="md"
+              sx={(theme) => ({
+                background: `linear-gradient(-45deg, #6495ED, #9d4edd)`,
+                fontWeight: 'lg', // short-hand syntax, same as `theme.fontWeight.lg`
+                '&:hover': {
+                  background: `linear-gradient(-45deg, ${theme.vars.palette.primary[900]}, ${theme.vars.palette.primary[600]})`,
+                },
+              })}
+              type="submit"
+              onClick={handleCreateTweet}
+            >
+              Tweet
+            </Button>
           </div>
         </CardFooter>
       </Card>

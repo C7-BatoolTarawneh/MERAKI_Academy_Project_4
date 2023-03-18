@@ -1,12 +1,29 @@
-.card-pos {
-  margin-left: 25em;
-  margin-bottom: 20px;
-  display: block;
-  height: auto;
-}
 
-@media only screen and (max-width: 600px) {
-  .MuiCardMedia-img {
-    padding: 10px;
+  .tweets-on-render {
+    width: 90%;
+    gap: 10vh;
+    /* border: solid 4px blueviolet; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
+
+  .card-pos{
+    width: 90%;
+
+  }
+#tweet-image-upload{
+  display: inline-block;
+  margin: 1rem 0;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 1.2rem;
+ 
+  color: #333;
+  
+  padding: 1rem 1rem;
+  border-radius: 4px;
+
+
 }
+  

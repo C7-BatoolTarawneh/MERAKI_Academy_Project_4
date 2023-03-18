@@ -10,7 +10,7 @@ import CardHeader from "@mui/material/CardHeader";
 import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import { red } from "@mui/material/colors";
+import { blue } from "@mui/material/colors";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -30,15 +30,15 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import LikeButton from "../LikeButton";
 import CreateNewTweet from "../CreateNewTweet";
-import TopNavbar from "../TopNavbar"
-import RightNavbar from "../RightNavbar"
-import UserPersonalCard from  "../UserPersonalCard";
+import TopNavbar from "../TopNavbar";
+import RightNavbar from "../RightNavbar";
+import UserPersonalCard from "../UserPersonalCard";
 
 import "./style.css";
 import ReplyButton from "../ReplyButton";
 import axios from "axios";
 const Profile = () => {
-  const {followerId} = useParams()
+  const { followerId } = useParams();
 
   const { isLoggedIn, token, user, userId, userName } = useContext(UserContext);
   const [tweets, setTweets] = useState([]);
@@ -101,7 +101,9 @@ const Profile = () => {
   const getTweetsByWriter = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/tweets/search_1?writer=${!followerId ? userId : followerId}`,
+        `http://localhost:5000/tweets/search_1?writer=${
+          !followerId ? userId : followerId
+        }`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -191,181 +193,185 @@ const Profile = () => {
     setIsReplying(true);
   };
 
-
   useEffect(() => {
     getTweetsByWriter();
-    console.log(followerId)
+    console.log(followerId);
   }, []);
 
   const renderMyTweets = () => {
-    return tweets.slice()
-    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map((tweet) => (
-      <div className="card-pos" key={tweet._id}>
-        <Card sx={{ maxWidth: 1100, highet: 100, bgcolor: "#f5f5f5" }}>
-          <CardHeader
-            avatar={
-              <Avatar
-                src={tweet.writer.profilePicture}
-                sx={{ bgcolor: red[500] }}
-              >
-                {tweet.writer.userName ? tweet.writer.userName.charAt(0) : ""}
-              </Avatar>
-            }
-            action={
-              isLoggedIn &&
-              tweet.writer._id === userId && (
-                <IconButton
-                  aria-label="settings"
-                  onClick={(event) => handleMenuClick(event, tweet)}
+    return tweets
+      .slice()
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      .map((tweet) => (
+        <div className="card-pos" key={tweet._id}>
+          <Card sx={{ bgcolor: "#00000" }}>
+            <CardHeader
+              avatar={
+                <Avatar
+                  src={tweet.writer.profilePicture}
+                  sx={{ bgcolor: blue[500] }}
                 >
-                  <MoreVertIcon />
-                </IconButton>
-              )
-            }
-            title={`${tweet.writer.userName} `}
-            subheader={
-              <React.Fragment>
-                <div>
-                  {"Created at: " + new Date(tweet.createdAt).toLocaleString()}
-                </div>
-                <div>
-                  {"Updated at: " + new Date(tweet.updatedAt).toLocaleString()}
-                </div>
-              </React.Fragment>
-            }
-          />
-          {tweet.image && (
-            <CardMedia
-              sx={{ maxWidth: 400, mx: "auto" }}
-              component="img"
-              // width="5%"
-              sizes="mini"
-              padding="30"
-              // height="1%"
-              image={tweet.image}
-              src={url}
-              alt="Tweet image"
+                  {tweet.writer.userName ? tweet.writer.userName.charAt(0) : ""}
+                </Avatar>
+              }
+              action={
+                isLoggedIn &&
+                tweet.writer._id === userId && (
+                  <IconButton
+                    aria-label="settings"
+                    onClick={(event) => handleMenuClick(event, tweet)}
+                  >
+                    <MoreVertIcon />
+                  </IconButton>
+                )
+              }
+              title={`@${tweet.writer.userName} `}
+              subheader={
+                <React.Fragment>
+                  <div>
+                    {"Created at: " +
+                      new Date(tweet.createdAt).toLocaleString()}
+                  </div>
+                  <div>
+                    {"Updated at: " +
+                      new Date(tweet.updatedAt).toLocaleString()}
+                  </div>
+                </React.Fragment>
+              }
             />
-          )}
-          <CardContent>
-            <Typography variant="body2" color="text.primary">
-              {tweet.description}
-            </Typography>
-          </CardContent>
-          <CardActions
-            disableSpacing
-            sx={{ bgcolor: "#e8eaf6", border: "outset" }}
-          >
-            <IconButton
-              aria-label="add to favorites"
-              disableRipple
-              sx={{ disableTouchRipple: false }}
-            >
-              <LikeButton tweet={tweet} />
-            </IconButton>
-
-            <IconButton aria-label="reply" disableRipple>
-              <ReplyButton
-                tweetId={tweet._id}
-                handleReplyButtonClick={handleReplyButtonClick}
+            {tweet.image && (
+              <CardMedia
+              sx={{ maxWidth: 300, mx: "auto", borderRadius: "10px" }}
+                component="img"
+                // width="5%"
+                sizes="mini"
+                padding="30"
+                // height="1%"
+                image={tweet.image}
+                src={url}
+                alt="Tweet image"
               />
-            </IconButton>
-          </CardActions>
-          {isReplying && (
-            <ReplyButton tweetId={tweet._id} setIsReplying={setIsReplying} />
-          )}
-        </Card>
-        <Menu
-          id="simple-menu"
-          anchorEl={anchorEl}
-          keepMounted
-          open={Boolean(anchorEl) && selectedTweet?._id === tweet._id}
-          onClose={handleMenuClose}
-        >
-          {tweet?.writer._id === userId && (
-            <div>
-              <MenuItem>
-                <ListItemIcon>
-                  <DeleteIcon
-                    fontSize="small"
-                    onClick={() => handleDeleteTweet(tweet._id)}
-                  />
-                </ListItemIcon>
-                <Typography variant="inherit" noWrap>
-                  Delete Tweet
-                </Typography>
-              </MenuItem>
-              <MenuItem>
-                <ListItemIcon>
-                  <EditIcon
-                    fontSize="small"
-                    onClick={() => handleEditTweetClick(tweet)}
-                  />
-                </ListItemIcon>
-                <Typography variant="inherit" noWrap>
-                  Update Tweet
-                </Typography>
-              </MenuItem>
-            </div>
-          )}
-        </Menu>
-        <Modal open={isModalOpen} onClose={handleModalClose}>
-          <Box
-            sx={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              width: 400,
-              bgcolor: "background.paper",
-              boxShadow: 24,
-              p: 4,
-            }}
+            )}
+            <CardContent>
+              <Typography variant="body2" color="text.primary"  fontFamily="Arial"
+                fontSize="20px">
+                {tweet.description}
+              </Typography>
+            </CardContent>
+            <CardActions
+              disableSpacing
+              sx={{ bgcolor: "#ffffff", border: "outset", position: "sticky" }}
+            >
+              <IconButton
+                aria-label="add to favorites"
+                disableRipple
+                sx={{ disableTouchRipple: false }}
+              >
+                <LikeButton tweet={tweet} />
+              </IconButton>
+
+              <IconButton aria-label="reply" disableRipple>
+                <ReplyButton
+                  tweetId={tweet._id}
+                  handleReplyButtonClick={handleReplyButtonClick}
+                />
+              </IconButton>
+            </CardActions>
+            {isReplying && (
+              <ReplyButton tweetId={tweet._id} setIsReplying={setIsReplying} />
+            )}
+          </Card>
+          <Menu
+            id="simple-menu"
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl) && selectedTweet?._id === tweet._id}
+            onClose={handleMenuClose}
           >
-            <form
-              onSubmit={(e) => {
-                uploadImage(e);
+            {tweet?.writer._id === userId && (
+              <div>
+                <MenuItem>
+                  <ListItemIcon>
+                    <DeleteIcon
+                      fontSize="small"
+                      onClick={() => handleDeleteTweet(tweet._id)}
+                    />
+                  </ListItemIcon>
+                  <Typography variant="inherit" noWrap>
+                    Delete Tweet
+                  </Typography>
+                </MenuItem>
+                <MenuItem>
+                  <ListItemIcon>
+                    <EditIcon
+                      fontSize="small"
+                      onClick={() => handleEditTweetClick(tweet)}
+                    />
+                  </ListItemIcon>
+                  <Typography variant="inherit" noWrap>
+                    Update Tweet
+                  </Typography>
+                </MenuItem>
+              </div>
+            )}
+          </Menu>
+          <Modal open={isModalOpen} onClose={handleModalClose}>
+            <Box
+              sx={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                width: 400,
+                bgcolor: "background.paper",
+                boxShadow: 24,
+                p: 4,
               }}
             >
-              <TextField
-                label="Description"
-                fullWidth
-                multiline
-                rows={4}
-                value={updatedTweet.description}
-                onChange={(event) =>
-                  setUpdatedTweet({
-                    ...updatedTweet,
-                    description: event.target.value,
-                  })
-                }
-              />
-              <input
-                accept="image/*"
-                id="tweet-image-upload"
-                type="file"
-                onChange={(event) => setImagee(event.target.files[0])}
-              />
+              <form
+                onSubmit={(e) => {
+                  uploadImage(e);
+                }}
+              >
+                <TextField
+                  label="Description"
+                  fullWidth
+                  multiline
+                  rows={4}
+                  value={updatedTweet.description}
+                  onChange={(event) =>
+                    setUpdatedTweet({
+                      ...updatedTweet,
+                      description: event.target.value,
+                    })
+                  }
+                />
+                <input
+                  accept="image/*"
+                  id="tweet-image-upload"
+                  type="file"
+                  onChange={(event) => setImagee(event.target.files[0])}
+                />
 
-              <Button variant="contained" type="submit">
-                Save Changes
-              </Button>
-            </form>
-          </Box>
-        </Modal>
-      </div>
-    ));
+                <Button variant="contained" type="submit"  style={{ backgroundColor: "#8e44ad", color: "#fff" }}>
+                  Save Changes
+                </Button>
+              </form>
+            </Box>
+          </Modal>
+        </div>
+      ));
   };
   return (
-    <div>
-      
-<h1>Profile</h1>
-        <UserPersonalCard className="UserPersonalCard"/>
-      <CreateNewTweet className="create-tweet"  />
-      <LeftNavbar />
-      <RightNavbar/>
-
-      {renderMyTweets()}
+    <div className="profile_container">
+      <div className="nav_box">
+        <LeftNavbar />
+      </div>
+      <div className="profile-center">
+        <UserPersonalCard />
+        <CreateNewTweet />
+        <div className="tweets-on-render">{renderMyTweets()}</div>
+      </div>
     </div>
   );
 };

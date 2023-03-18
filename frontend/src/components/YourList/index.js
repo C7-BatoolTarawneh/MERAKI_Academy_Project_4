@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { UserContext } from "../../App";
 import axios from "axios";
 import RightNavbar from "../RightNavbar";
-
+import AddCircleSharpIcon from '@mui/icons-material/AddCircleSharp';
 import LeftNavbar from "../LeftNavbar";
 import {
   Avatar,
@@ -12,9 +12,12 @@ import {
   VStack,
   Spacer,
   Box,
-  Button,
-} from "@chakra-ui/react";
 
+} from "@chakra-ui/react";
+import Button from  '@mui/material/Button'
+import RemoveCircleSharpIcon from '@mui/icons-material/RemoveCircleSharp';
+
+import "./style.css"
 const YourList = () => {
   const { isLoggedIn, token, user, userId, userName } = useContext(
     UserContext
@@ -80,31 +83,41 @@ const YourList = () => {
   }, []);
 
   return (
-    <div>
+    <div className=" list-container">
+    
+      <div className="left-navbar">
       <LeftNavbar />
-      <RightNavbar/>
-
-      <Box mx="300">
+      {/* <RightNavbar/> */}
+</div>
+<div className="list-contents">
+<h1>Your Network </h1>
+<br/>
+{/* contain followers and followings with ther lists */}
+      <Box marginLeft={"6vw"} marginTop={"5vh"}>
         <Flex>
-          <Box mx="auto">
-            <Text fontWeight="bold" fontSize="lg">
+          {/* followerbox */}
+          <Box>
+            <Text mb="10" fontWeight="bold" fontSize="25" fontFamily="Arial" color="#6495ED">
               Followers
             </Text>
-            <Box>
+            <Box  >
               {users.followers.length > 0 ? (
                 users.followers.map((follower) => (
                   <Flex key={follower._id} alignItems="center" my={2}>
                      <Link to={`/profile/${follower._id}`}> 
                     <Avatar
                       src={follower.profilePicture}
-                      boxSize="40px"
-                      mr={2}
+                      boxSize="5vw"
+                      borderRadius= '50%' 
+                      sx={{ width: "5vw", height: "5vw", }}
+                      mr={"1vw"}
                     />
                      </Link>
-                    <Text>{follower.userName}</Text>
+                    <Text mr={"1vw"}>{follower.userName}</Text>
                     {!isFollowing(follower._id) && (
                       <Button
-                        variant="solid"
+                      variant="contained"
+                      endIcon={<AddCircleSharpIcon />}
                         colorScheme="teal"
                         size="xs"
                         ml={2}
@@ -116,12 +129,12 @@ const YourList = () => {
                   </Flex>
                 ))
               ) : (
-                <Text>No one is following you</Text>
+                <Text sx={{ color: 'text.secondary' }}>No one is following you</Text>
               )}
             </Box>
           </Box>
           <Box mx="auto">
-            <Text fontWeight="bold" fontSize="lg">
+            <Text mb="10" fontWeight="bold" fontSize="25" fontFamily="Arial" color="#6495ED">
               Following
             </Text>
             <Box>
@@ -131,16 +144,19 @@ const YourList = () => {
                     <Link to={`/profile/${theFollowing._id}`}>
                     <Avatar
                       src={theFollowing.profilePicture}
-                      boxSize="40px"
-                      mr={2}
+                      boxSize= "5vw"
+                      borderRadius= "50%"
+                      sx={{ width: "5vw", height: "5vw", }}
+                      mr={"1vw"}
                     />
                     </Link>
-                    <Text>{theFollowing.userName}</Text>
+                    <Text mr={"1vw"}>{theFollowing.userName}</Text>
                     <Button
-                      variant="solid"
-                      colorScheme="red"
-                      size="xs"
-                      ml={2}
+                      variant="contained"
+                      endIcon={<RemoveCircleSharpIcon />}
+                        colorScheme="teal"
+                        size="xs"
+                        ml={2}
                       onClick={() => handleUnfollow(theFollowing._id)}
                     >
                       Unfollow
@@ -154,6 +170,7 @@ const YourList = () => {
           </Box>
         </Flex>
       </Box>
+      </div>
     </div>
   );
 };

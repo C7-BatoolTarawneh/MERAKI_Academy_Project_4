@@ -1,9 +1,8 @@
-.twitter-icon-left-nav
-{
-    margin-left: 0.5em;
+*{
+    margin: 0;
+    padding: 0;
 }
-.home-icon-left-nav
-{
-    gap: 5px
+.right{
+    border:  solid 4px black;
+width:96%
 }
-/* style for the main content area after the left navbar */

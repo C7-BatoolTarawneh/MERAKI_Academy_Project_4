@@ -1,17 +1,25 @@
-.UserPersonalCard {
-  margin: 0 auto;
-  max-width: 800px;
-  margin-top: 20px;
-  margin-left: 210px;
-}
 
-@media screen and (max-width: 960px) {
-  .UserPersonalCard {
-    margin-left: 0;
-  }
+.profile_container {
+  display: grid;
+  grid-template-columns: 2fr 6fr 2fr;
+  grid-template-areas: "a b c";
+  gap:3vw
 }
 
 
-.UserPersonalCard{
-  width:3em
+
+.profile-center {
+  grid-area: b;
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  gap: 5vh;
+  width: 100%;
+ 
+}
+
+
+.card-pos{
+  width: 90%;
+
 }

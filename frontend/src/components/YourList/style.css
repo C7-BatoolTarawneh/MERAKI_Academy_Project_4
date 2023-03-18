@@ -1,0 +1,10 @@
+.list-container {
+  display: grid;
+  grid-template-columns: 2fr 6fr 2fr;
+  grid-template-areas: "a b c";
+  gap:3vw
+}
+.list-contents{
+    width:100%
+    
+}

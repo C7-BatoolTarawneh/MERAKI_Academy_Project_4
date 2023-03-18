@@ -11,6 +11,7 @@ import CreateNewTweet from "../CreateNewTweet";
 import { margin } from "@mui/system";
 import RightNavbar from "../RightNavbar";
 const Home = () => {
+  
   return (
     <div className="home-container">
       <div className="home-center">

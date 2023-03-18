@@ -32,6 +32,7 @@ const RightNavbar = () => {
 
   return (
     <div className="right">
+      <div className="inside">
     <form onSubmit={handleSearch}>
       <div className="search-container">
         <input className="search-input" type="text" placeholder="Search..." value={userName} onChange={(e) => setUserName(e.target.value)} />
@@ -64,6 +65,7 @@ const RightNavbar = () => {
       <h2>#Zain</h2>
       
       </div>
+    </div>
     </div>
   </div>
   );

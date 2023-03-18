@@ -6,6 +6,10 @@
   /* border:  solid 4px black; */
   width: 96%;
 }
+.inside {
+  position: sticky;
+   width:100%;
+ top:0;}
 .user-card {
   display: flex;
   align-items: center;

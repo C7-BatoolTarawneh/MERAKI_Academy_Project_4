@@ -10,7 +10,7 @@ import "./style.css";
 const Settings = () => {
   const [newEmail, setNewEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const { isLoggedIn, token } = useContext(UserContext);
+  const { isLoggedIn, token,userId } = useContext(UserContext);
   const [image, setImage] = useState("");
   const [url, setUrl] = useState("");
   const [user, setUser] = useState({});
@@ -38,6 +38,9 @@ const Settings = () => {
       console.log(json.url);
       setUrl(json.url); // update the url state here
       handleUpdatePicture(json.url, pictureType);
+      if (pictureType === "profilePicture") {
+        setProfilePicture(json.url);
+      } 
     } catch (err) {
       console.log(err);
     }
@@ -103,13 +106,27 @@ const Settings = () => {
       handleEditPassword();
     }
     if (profilePicture !== "") {
-      handleUpdatePicture(url, "profilePicture");
+      handleUpdatePicture(profilePicture, "profilePicture");
     }
-    if (coverPicture !== "") {
-      handleUpdatePicture(url, "coverPicture");
-    }
+    
   };
-
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/users/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setUser(response.data.user);
+        setProfilePicture(response.data.user.profilePicture);
+        setCoverPicture(response.data.user.coverPicture);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getUser();
+  }, [token]);
   return (
     <div className="setting-container">
       <LeftNavbar />
@@ -121,7 +138,7 @@ const Settings = () => {
             <div class="text-center">
               <img
                 src={
-                  user.profilePicture 
+                  profilePicture ||    user.profilePicture 
                 }
                 class="avatar-img-circle-img-thumbnail"
                 alt="avatar"
@@ -138,26 +155,7 @@ const Settings = () => {
           </div>
 
           {/* FOR COVER */}
-          <div class="col-md-3">
-            <div class="text-center">
-              <img
-                src={
-                  user.coverPicture ||
-                  "https://bootdey.com/img/Content/avatar/avatar7.png"
-                }
-                class="avatar-img-circle-img-thumbnail"
-                alt="avatar"
-              />
-              <div className="title">
-                <h2>Update a Cover Picture</h2>
-                <input
-                  type="file"
-                  class="form-control"
-                  onChange={(e) => setImage(e.target.files[0])}
-                />
-              </div>
-            </div>
-          </div>
+       
           {/* <!-- edit form column --> */}
           <br />
           <div class="col-md-9-personal-info">
@@ -197,7 +195,7 @@ const Settings = () => {
                   type="submit"
                   // onClick={handleSaveChanges}
                   onClick={(e) => {
-                    uploadImage(e, "profilePicture" || "coverPicture");
+                    uploadImage(e, "profilePicture" );
                     handleSaveChanges(e);
                   }}
                 >

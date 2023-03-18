@@ -18,11 +18,7 @@ app.use("/replies",repliesRouter);
 const retweetRouter = require("./routes/retweetRoute");
 app.use("/retweet",retweetRouter);
 
-// let text = "      aa       ";
-// let result = text.trim();
-// console.log("text:",text)
-// console.log("result:",result)
-// Handles any other endpoints [unassigned - endpoints]
+
 app.use("*", (req, res) => res.status(404).json("NO content at this path"));
 
 app.listen(PORT, () => {

@@ -1,6 +1,6 @@
-<p align="center">
- <img width="400px" height="100px" src="https://www.aps.edu/sapr/images/pnglot.comtwitterbirdlogopng139932.png/image_preview" alt="Project logo">
-</p>
+
+ 
+![twitter](https://user-images.githubusercontent.com/121294520/226169251-d6f22f2c-acf5-45d5-aed4-1edbb2a3bdb5.png)
 
 <h3 align="center">Twitter Clone
 </h3>

@@ -8,9 +8,7 @@
 ---
 
 <p align="center">"My Twitter clone is a full-stack web application built using the MERN stack - MongoDB, Express, React, and Node.js. It offers users a familiar social media experience, with features like posting, following, and liking tweets,etc..."
-    <br> 
-
-    <br> 
+   
 </p>
 
 ## 📝 Table of Contents

@@ -1,5 +1,5 @@
 <p align="center">
- <img width="400px" height="100px" src="https://www.aps.edu/sapr/images/pnglot.comtwitterbirdlogopng139932.png/image" alt="Project logo">
+ <img width="400px" height="100px" src="https://www.aps.edu/sapr/images/pnglot.comtwitterbirdlogopng139932.png/image_preview" alt="Project logo">
 </p>
 
 <h3 align="center">Twitter Clone
@@ -95,7 +95,7 @@ Now app ready to use
 
 ## Data Flow <a name = "#data_flow"></a>
 
-<img width=200px height=200px src="https://cacoo.com/assets/site/img/templates/screenshots/er-database-diagram.png" alt="Diagram"></a>
+<img width=200px height=200px src="https://trello.com/1/cards/6400fba3199a801dff85b7b7/attachments/6400fd0431ab4e6a06e138fb/previews/6400fd0531ab4e6a06e13bac/download/Screenshot_5.png" alt="Diagram"></a>
 
 ## ⚠️ Guided By <a name = "guided_by"></a>
 

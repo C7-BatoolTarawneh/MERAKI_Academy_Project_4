@@ -70,10 +70,13 @@ Now app ready to use
 
 1. You have to register to view your profile and home page
 -your age must be more than 18 to register
+![reg](https://user-images.githubusercontent.com/121294520/226169182-a23e351a-45e0-4d36-bf4a-30f57daa0747.png)
 
 2. To post a new tweet, simply click on the "Create Tweet" button and type out your message,you can also add images or emojies .
+![home](https://user-images.githubusercontent.com/121294520/226169191-1a78b446-47fe-4731-8b71-f70afaf2df09.png)
 
 3. Want to engage with other users? You can reply to tweets, like tweets, and even follow and unfollow other users to curate your own timeline.
+![net](https://user-images.githubusercontent.com/121294520/226169199-7fdfd26d-b8cc-484f-a7c3-92154899bffd.png)
 
 4. If you want to edit your profile information, simply navigate to the "Settings" section and make any necessary changes, such as updating your email or password.
 
@@ -93,7 +96,8 @@ Now app ready to use
 
 ## Data Flow <a name = "#data_flow"></a>
 
-<img width=200px height=200px src="https://trello.com/1/cards/6400fba3199a801dff85b7b7/attachments/6400fd0431ab4e6a06e138fb/previews/6400fd0531ab4e6a06e13bac/download/Screenshot_5.png" alt="Diagram"></a>
+
+![sch](https://user-images.githubusercontent.com/121294520/226169149-198933bf-1560-4c63-b18a-111281ab37ad.png)
 
 ## ⚠️ Guided By <a name = "guided_by"></a>
 

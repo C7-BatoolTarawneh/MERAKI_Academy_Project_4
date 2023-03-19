@@ -1,7 +1,5 @@
 <p align="center">
-<a href="https://www.meraki-academy.org" target="_blank" rel="noopener noreferrer">
  <img width="400px" height="100px" src="https://www.aps.edu/sapr/images/pnglot.comtwitterbirdlogopng139932.png/image" alt="Project logo">
- </a>
 </p>
 
 <h3 align="center">Twitter Clone
